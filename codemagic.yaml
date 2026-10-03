@@ -28,6 +28,14 @@ workflows:
         script: |
           echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/local.properties"
 
+      - name: Preparar Gradle
+        script: |
+          GRADLE_VERSION="8.9"
+          curl -fsSL "https://services.gradle.org/distributions/gradle-$GRADLE_VERSION-bin.zip" -o /tmp/gradle.zip
+          unzip -q /tmp/gradle.zip -d /tmp
+          /tmp/gradle-$GRADLE_VERSION/bin/gradle wrapper --gradle-version $GRADLE_VERSION
+          chmod +x ./gradlew
+
       - name: Build do AAB de release
         script: |
           ./gradlew bundleRelease
