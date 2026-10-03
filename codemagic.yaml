@@ -1,0 +1,49 @@
+workflows:
+  android-release:
+    name: Controle Corporal - Release
+    max_build_duration: 120
+    instance_type: mac_mini_m2
+
+    environment:
+      android_signing:
+        - keystore_reference
+      vars:
+        PACKAGE_NAME: "com.danielmarkpsn.controlecorporal"
+      groups:
+        - google_play_credentials
+
+    cache:
+      cache_paths:
+        - $HOME/.gradle/caches
+        - $HOME/.gradle/wrapper
+
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: main
+          include: true
+          source: true
+
+    scripts:
+      - name: Definir localização do Android SDK
+        script: |
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/local.properties"
+
+      - name: Build do AAB de release
+        script: |
+          ./gradlew bundleRelease
+
+      - name: Build do APK de teste
+        script: |
+          ./gradlew assembleRelease
+
+    artifacts:
+      - app/build/outputs/**/*.aab
+      - app/build/outputs/**/*.apk
+
+    publishing:
+      google_play:
+        credentials: $GOOGLE_PLAY_SERVICE_ACCOUNT_CREDENTIALS
+        track: internal
+        submit_as_draft: false
