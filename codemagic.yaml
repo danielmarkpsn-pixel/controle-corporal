@@ -6,7 +6,7 @@ workflows:
 
     environment:
       android_signing:
-        - keystore_reference
+        - mestre_tabuada_release
       vars:
         PACKAGE_NAME: "com.danielmarkpsn.controlecorporal"
       groups:
