@@ -1,12 +1,22 @@
 package com.danielmarkpsn.controlecorporal.ui.screens
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -78,7 +88,7 @@ fun HomeScreen(
                         if (ultimoPeso != null) {
                             Text(
                                 text = if (diferenca > 0) "Faltam %.1f kg".format(diferenca)
-                                else "Meta atingida! 🎉",
+                                else "Meta atingida!",
                                 style = MaterialTheme.typography.bodyMedium
                             )
                         }
@@ -92,12 +102,19 @@ fun HomeScreen(
             Button(onClick = onAdicionarPeso, modifier = Modifier.fillMaxWidth()) {
                 Text("Registrar peso")
             }
+
             Button(onClick = onAdicionarMedida, modifier = Modifier.fillMaxWidth()) {
                 Text("Registrar medida")
             }
+
+            OutlinedButton(onClick = onVerGrafico, modifier = Modifier.fillMaxWidth()) {
+                Text("Ver gráfico de evolução")
+            }
+
             OutlinedButton(onClick = onVerMeta, modifier = Modifier.fillMaxWidth()) {
                 Text("Definir meta")
             }
+
             OutlinedButton(onClick = onVerHistorico, modifier = Modifier.fillMaxWidth()) {
                 Text("Ver histórico")
             }
