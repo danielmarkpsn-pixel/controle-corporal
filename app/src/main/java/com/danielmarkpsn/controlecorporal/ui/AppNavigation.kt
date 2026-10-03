@@ -7,6 +7,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.danielmarkpsn.controlecorporal.ControleApp
+import com.danielmarkpsn.controlecorporal.license.LicenseManager
+import com.danielmarkpsn.controlecorporal.license.LicenseScreen
 import com.danielmarkpsn.controlecorporal.ui.screens.AddMedidaScreen
 import com.danielmarkpsn.controlecorporal.ui.screens.AddPesoScreen
 import com.danielmarkpsn.controlecorporal.ui.screens.GraficoScreen
@@ -16,6 +18,7 @@ import com.danielmarkpsn.controlecorporal.ui.screens.MetaScreen
 import com.danielmarkpsn.controlecorporal.viewmodel.ControleViewModel
 
 object Rotas {
+    const val LICENSE = "license"
     const val HOME = "home"
     const val ADD_PESO = "add_peso"
     const val ADD_MEDIDA = "add_medida"
@@ -33,7 +36,15 @@ fun AppNavigation() {
         factory = ControleViewModel.Factory(app.container.repository)
     )
 
-    NavHost(navController = navController, startDestination = Rotas.HOME) {
+    NavHost(navController = navController, startDestination = if (LicenseManager.isLicensed(app)) Rotas.HOME else Rotas.LICENSE) {
+
+        composable(Rotas.LICENSE) {
+            LicenseScreen(onActivated = {
+                navController.navigate(Rotas.HOME) {
+                    popUpTo(Rotas.LICENSE) { inclusive = true }
+                }
+            })
+        }
 
         composable(Rotas.HOME) {
             HomeScreen(
