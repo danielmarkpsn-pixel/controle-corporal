@@ -20,7 +20,8 @@ fun HomeScreen(
     onAdicionarPeso: () -> Unit,
     onAdicionarMedida: () -> Unit,
     onVerHistorico: () -> Unit,
-    onVerMeta: () -> Unit
+    onVerMeta: () -> Unit,
+    onVerGrafico: () -> Unit
 ) {
     val ultimoPeso by viewModel.ultimoPeso.collectAsStateWithLifecycle()
     val meta by viewModel.meta.collectAsStateWithLifecycle()
