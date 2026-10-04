@@ -90,8 +90,7 @@ fun AppNavigation() {
         composable(Rotas.GRAFICO) {
             val medicoes by viewModel.medicoes.collectAsStateWithLifecycle()
             GraficoScreen(
-                medicoes = medicoes,
-                onVoltar = { navController.popBackStack() }
+                medicoes = medicoes
             )
         }
     }
