@@ -70,6 +70,7 @@ fun HistoricoScreen(
                             }
                             Spacer(Modifier.height(14.dp))
                             MeasureLine("Cintura", medicao.cintura)
+                            MeasureLine("Abdômen", medicao.abdomen)
                             MeasureLine("Quadril", medicao.quadril)
                             MeasureLine("Peito", medicao.peito)
                             MeasureLine("Braço direito", medicao.bracoDireito)
