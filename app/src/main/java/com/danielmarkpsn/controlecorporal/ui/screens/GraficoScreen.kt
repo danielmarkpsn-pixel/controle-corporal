@@ -16,6 +16,7 @@ import kotlin.math.max
 private enum class GraficoTipo(val titulo: String) {
     PESO("Peso (kg)"),
     CINTURA("Cintura (cm)"),
+    ABDOMEN("Abdômen (cm)"),
     BRACOS("Braços — direita x esquerda"),
     COXAS("Coxas — direita x esquerda"),
     PANTURRILHAS("Panturrilhas — direita x esquerda")
@@ -63,6 +64,7 @@ fun GraficoScreen(medicoes: List<Medicao>, onVoltar: () -> Unit, modifier: Modif
             when (tipo) {
                 GraficoTipo.PESO -> MetricChart("Peso", lista.map { it.peso })
                 GraficoTipo.CINTURA -> MetricChart("Cintura", lista.map { it.cintura })
+                GraficoTipo.ABDOMEN -> MetricChart("Abdômen", lista.map { it.abdomen })
                 GraficoTipo.BRACOS -> DualChart("Braço direito", lista.map { it.bracoDireito }, "Braço esquerdo", lista.map { it.bracoEsquerdo })
                 GraficoTipo.COXAS -> DualChart("Coxa direita", lista.map { it.coxaDireita }, "Coxa esquerda", lista.map { it.coxaEsquerda })
                 GraficoTipo.PANTURRILHAS -> DualChart("Panturrilha direita", lista.map { it.panturrilhaDireita }, "Panturrilha esquerda", lista.map { it.panturrilhaEsquerda })
