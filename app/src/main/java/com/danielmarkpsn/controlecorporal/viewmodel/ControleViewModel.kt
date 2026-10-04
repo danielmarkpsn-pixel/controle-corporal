@@ -61,7 +61,9 @@ class ControleViewModel(
                 bracoDireito = medidasDoDia.find { it.tipo.equals("Braço direito", ignoreCase = true) }?.valorCm ?: 0f,
                 bracoEsquerdo = medidasDoDia.find { it.tipo.equals("Braço esquerdo", ignoreCase = true) }?.valorCm ?: 0f,
                 coxaDireita = medidasDoDia.find { it.tipo.equals("Coxa direita", ignoreCase = true) }?.valorCm ?: 0f,
-                coxaEsquerda = medidasDoDia.find { it.tipo.equals("Coxa esquerda", ignoreCase = true) }?.valorCm ?: 0f
+                coxaEsquerda = medidasDoDia.find { it.tipo.equals("Coxa esquerda", ignoreCase = true) }?.valorCm ?: 0f,
+                panturrilhaDireita = medidasDoDia.find { it.tipo.equals("Panturrilha direita", ignoreCase = true) }?.valorCm ?: 0f,
+                panturrilhaEsquerda = medidasDoDia.find { it.tipo.equals("Panturrilha esquerda", ignoreCase = true) }?.valorCm ?: 0f
             )
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
