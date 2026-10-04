@@ -89,9 +89,5 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
 
-    // ✅ ADICIONADO — Vico (gráficos)
-    implementation(libs.vico.compose)
-    implementation(libs.vico.compose.m3)
-
     debugImplementation(libs.androidx.ui.tooling)
 }
