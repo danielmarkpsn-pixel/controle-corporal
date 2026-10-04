@@ -12,7 +12,6 @@ workflows:
 
     cache:
       cache_paths:
-        - $HOME/.gradle/caches
         - $HOME/.gradle/wrapper
 
     triggering:
@@ -36,13 +35,17 @@ workflows:
           /tmp/gradle-$GRADLE_VERSION/bin/gradle wrapper --gradle-version $GRADLE_VERSION
           chmod +x ./gradlew
 
+      - name: Limpar caches e verificar dependências
+        script: |
+          ./gradlew clean --refresh-dependencies
+
       - name: Build do AAB de release
         script: |
-          ./gradlew bundleRelease
+          ./gradlew bundleRelease --refresh-dependencies
 
       - name: Build do APK de teste
         script: |
-          ./gradlew assembleRelease
+          ./gradlew assembleRelease --refresh-dependencies
 
     artifacts:
       - app/build/outputs/**/*.aab
