@@ -57,7 +57,7 @@ class ControleViewModel(
                 peso = peso.pesoKg,
                 cintura = medidasDoDia.find { it.tipo.equals("cintura", ignoreCase = true) }?.valorCm ?: 0f,
                 abdomen = medidasDoDia.find { it.tipo.equals("abdômen", ignoreCase = true) || it.tipo.equals("abdomen", ignoreCase = true) }?.valorCm ?: 0f,
-                quadril = medidasDoDia.find { it.tipo == "quadril" }?.valorCm ?: 0f,
+                quadril = medidasDoDia.find { it.tipo.equals("quadril", ignoreCase = true) }?.valorCm ?: 0f,
                 peito = medidasDoDia.find { it.tipo.equals("Peito", ignoreCase = true) }?.valorCm ?: 0f,
                 bracoDireito = medidasDoDia.find { it.tipo.equals("Braço direito", ignoreCase = true) }?.valorCm ?: 0f,
                 bracoEsquerdo = medidasDoDia.find { it.tipo.equals("Braço esquerdo", ignoreCase = true) }?.valorCm ?: 0f,
