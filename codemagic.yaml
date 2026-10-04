@@ -13,6 +13,7 @@ workflows:
     cache:
       cache_paths:
         - $HOME/.gradle/wrapper
+        - $HOME/.gradle/caches
 
     triggering:
       events:
@@ -27,21 +28,17 @@ workflows:
         script: |
           echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/local.properties"
 
-      - name: Preparar Gradle
+      - name: Dar permissão ao gradlew
         script: |
-          GRADLE_VERSION="8.9"
-          curl -fsSL "https://services.gradle.org/distributions/gradle-$GRADLE_VERSION-bin.zip" -o /tmp/gradle.zip
-          unzip -q /tmp/gradle.zip -d /tmp
-          /tmp/gradle-$GRADLE_VERSION/bin/gradle wrapper --gradle-version $GRADLE_VERSION
           chmod +x ./gradlew
 
-      - name: Limpar caches e verificar dependências
+      - name: Limpar caches
         script: |
-          ./gradlew clean --refresh-dependencies
+          ./gradlew clean
 
       - name: Build do APK pessoal
         script: |
-          ./gradlew assembleRelease --refresh-dependencies
+          ./gradlew assembleRelease
 
     artifacts:
       - app/build/outputs/**/*.apk
