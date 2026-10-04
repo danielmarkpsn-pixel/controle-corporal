@@ -7,9 +7,11 @@ import com.danielmarkpsn.controlecorporal.data.ControleRepository
 import com.danielmarkpsn.controlecorporal.data.MedidaEntity
 import com.danielmarkpsn.controlecorporal.data.MetaEntity
 import com.danielmarkpsn.controlecorporal.data.PesoEntity
+import com.danielmarkpsn.controlecorporal.ui.model.Medicao
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -32,14 +34,35 @@ class ControleViewModel(
     val ultimoPeso: StateFlow<PesoEntity?> = repository.ultimoPeso()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
+    // ✅ NOVO — Lista de Medicao combinada (Peso + Medidas) para as telas
+    val medicoes: StateFlow<List<Medicao>> = combine(
+        repository.listarPesosCronologico(),
+        repository.listarMedidas()
+    ) { pesos, medidas ->
+        val medidasPorData = medidas.groupBy { it.data }
+
+        pesos.map { peso ->
+            val medidasDoDia = medidasPorData[peso.data].orEmpty()
+            Medicao(
+                data = peso.data,
+                peso = peso.pesoKg,
+                cintura = medidasDoDia.find { it.tipo == "cintura" }?.valorCm ?: 0f,
+                quadril = medidasDoDia.find { it.tipo == "quadril" }?.valorCm ?: 0f,
+                peito = medidasDoDia.find { it.tipo == "peito" }?.valorCm ?: 0f,
+                braco = medidasDoDia.find { it.tipo == "braço" }?.valorCm ?: 0f
+            )
+        }
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
     // IMC calculado a partir do último peso + altura da meta
     val imcAtual: StateFlow<Float> = combine(ultimoPeso, meta) { peso, metaAtual ->
         if (peso == null || metaAtual == null || metaAtual.alturaCm <= 0f) 0f
         else repository.calcularImc(peso.pesoKg, metaAtual.alturaCm)
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0f)
 
+    // ✅ CORRIGIDO — usa map em vez de combine consigo mesmo
     val classificacaoImc: StateFlow<String> = imcAtual
-        .combine(imcAtual) { imc, _ -> repository.classificarImc(imc) }
+        .map { imc -> repository.classificarImc(imc) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), "—")
 
     fun adicionarPeso(data: Long, pesoKg: Float, observacao: String?) {
