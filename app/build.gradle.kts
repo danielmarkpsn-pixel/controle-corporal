@@ -21,10 +21,12 @@ android {
         }
     }
 
+    // ✅ Só configura signing se as variáveis do Codemagic existirem
     signingConfigs {
         create("release") {
-            if (System.getenv("CI") == "true") {
-                storeFile = file(System.getenv("CM_KEYSTORE_PATH") ?: "")
+            val keystorePath = System.getenv("CM_KEYSTORE_PATH")
+            if (!keystorePath.isNullOrBlank()) {
+                storeFile = file(keystorePath)
                 storePassword = System.getenv("CM_KEYSTORE_PASSWORD")
                 keyAlias = System.getenv("CM_KEY_ALIAS")
                 keyPassword = System.getenv("CM_KEY_PASSWORD")
@@ -39,7 +41,11 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            signingConfig = signingConfigs.getByName("release")
+            // ✅ Aplica signing só se o keystore foi configurado
+            val keystorePath = System.getenv("CM_KEYSTORE_PATH")
+            if (!keystorePath.isNullOrBlank()) {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
     }
 
@@ -54,6 +60,7 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true  // ✅ ADICIONADO — resolve o aviso e evita erros de BuildConfig
     }
 
     packaging {
@@ -81,6 +88,10 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
+
+    // ✅ ADICIONADO — Vico (gráficos)
+    implementation(libs.vico.compose)
+    implementation(libs.vico.compose.m3)
 
     debugImplementation(libs.androidx.ui.tooling)
 }
