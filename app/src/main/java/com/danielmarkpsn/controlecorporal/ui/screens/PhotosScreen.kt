@@ -37,7 +37,7 @@ fun PhotosScreen(onVoltar: () -> Unit) {
         photos = (photos + uri.toString()).distinct()
         savePhotos(context, photos)
     }
-    fun escolher() = picker.launch(ActivityResultContracts.PickVisualMedia.Request(ActivityResultContracts.PickVisualMedia.ImageOnly))
+    fun escolher() = picker.launch(ActivityResultContracts.PickVisualMedia.SingleMimeType("image/*"))
 
     Scaffold(
         topBar = {
