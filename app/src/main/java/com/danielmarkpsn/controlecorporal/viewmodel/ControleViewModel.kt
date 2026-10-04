@@ -8,6 +8,7 @@ import com.danielmarkpsn.controlecorporal.data.MedidaEntity
 import com.danielmarkpsn.controlecorporal.data.MetaEntity
 import com.danielmarkpsn.controlecorporal.data.PesoEntity
 import com.danielmarkpsn.controlecorporal.ui.model.Medicao
+import java.util.Calendar
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -39,17 +40,25 @@ class ControleViewModel(
         repository.listarPesosCronologico(),
         repository.listarMedidas()
     ) { pesos, medidas ->
-        val medidasPorData = medidas.groupBy { it.data }
+        fun dia(timestamp: Long): IntArray {
+            val calendar = Calendar.getInstance().apply { timeInMillis = timestamp }
+            return intArrayOf(
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.DAY_OF_YEAR)
+            )
+        }
+
+        val medidasPorDia = medidas.groupBy { dia(it.data).contentToString() }
 
         pesos.map { peso ->
-            val medidasDoDia = medidasPorData[peso.data].orEmpty()
+            val medidasDoDia = medidasPorDia[dia(peso.data).contentToString()].orEmpty()
             Medicao(
                 data = peso.data,
                 peso = peso.pesoKg,
                 cintura = medidasDoDia.find { it.tipo == "cintura" }?.valorCm ?: 0f,
                 quadril = medidasDoDia.find { it.tipo == "quadril" }?.valorCm ?: 0f,
                 peito = medidasDoDia.find { it.tipo == "peito" }?.valorCm ?: 0f,
-                braco = medidasDoDia.find { it.tipo == "braço" }?.valorCm ?: 0f
+                braco = medidasDoDia.find { it.tipo.equals("braço", ignoreCase = true) }?.valorCm ?: 0f
             )
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
