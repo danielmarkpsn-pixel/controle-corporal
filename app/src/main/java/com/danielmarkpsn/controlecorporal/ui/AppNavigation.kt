@@ -1,6 +1,8 @@
 package com.danielmarkpsn.controlecorporal.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
@@ -72,8 +74,9 @@ fun AppNavigation() {
         }
 
         composable(Rotas.HISTORICO) {
+            val medicoes by viewModel.medicoes.collectAsStateWithLifecycle()
             HistoricoScreen(
-                viewModel = viewModel,
+                medicoes = medicoes,
                 onVoltar = { navController.popBackStack() }
             )
         }
@@ -86,8 +89,9 @@ fun AppNavigation() {
         }
 
         composable(Rotas.GRAFICO) {
+            val medicoes by viewModel.medicoes.collectAsStateWithLifecycle()
             GraficoScreen(
-                viewModel = viewModel,
+                medicoes = medicoes,
                 onVoltar = { navController.popBackStack() }
             )
         }
