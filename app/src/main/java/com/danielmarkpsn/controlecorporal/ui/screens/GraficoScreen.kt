@@ -11,7 +11,6 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.unit.dp
 import com.danielmarkpsn.controlecorporal.data.Medicao
 import kotlin.math.max
-import kotlin.math.min
 
 @Composable
 fun GraficoScreen(
@@ -63,6 +62,8 @@ private fun LineChart(
 ) {
     if (values.size < 2) return
 
+    val primaryColor = MaterialTheme.colorScheme.primary
+
     Canvas(modifier = modifier.padding(vertical = 12.dp)) {
         val minValue = values.minOrNull() ?: return@Canvas
         val maxValue = values.maxOrNull() ?: return@Canvas
@@ -79,7 +80,7 @@ private fun LineChart(
 
         drawPath(
             path = path,
-            color = MaterialTheme.colorScheme.primary,
+            color = primaryColor,
             style = androidx.compose.ui.graphics.drawscope.Stroke(width = 6f)
         )
 
