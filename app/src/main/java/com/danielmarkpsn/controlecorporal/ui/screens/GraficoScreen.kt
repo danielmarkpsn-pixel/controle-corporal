@@ -1,98 +1,97 @@
 package com.danielmarkpsn.controlecorporal.ui.screens
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.unit.dp
 import com.danielmarkpsn.controlecorporal.data.Medicao
-import com.patrykandpatrick.vico.compose.chart.Chart
-import com.patrykandpatrick.vico.compose.chart.line.lineChart
-import com.patrykandpatrick.vico.core.chart.line.LineChart
-import com.patrykandpatrick.vico.core.entry.FloatEntry
-import com.patrykandpatrick.vico.core.entry.entryModelOf
+import kotlin.math.max
+import kotlin.math.min
 
 @Composable
 fun GraficoScreen(
     medicoes: List<Medicao>,
     modifier: Modifier = Modifier
 ) {
-    val lista = remember(medicoes) {
-        medicoes.sortedBy { it.data }
-    }
+    val lista = medicoes.sortedBy { it.data }
 
     if (lista.size < 2) {
-        Box(
-            modifier = modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            Text("São necessárias pelo menos 2 medições para exibir o gráfico.")
+        Box(modifier = modifier.fillMaxSize()) {
+            Text(
+                "São necessárias pelo menos 2 medições para exibir o gráfico.",
+                modifier = Modifier.padding(16.dp)
+            )
         }
         return
     }
 
-    // ✅ Converte os dados para o formato do Vico
-    val entradasPeso = remember(lista) {
-        lista.mapIndexed { index, medicao ->
-            FloatEntry(x = index.toFloat(), y = medicao.peso)
-        }
-    }
-
-    val entradasCintura = remember(lista) {
-        lista.mapIndexed { index, medicao ->
-            FloatEntry(x = index.toFloat(), y = medicao.cintura)
-        }
-    }
-
-    val modeloPeso = remember(entradasPeso) { entryModelOf(entradasPeso) }
-    val modeloCintura = remember(entradasCintura) { entryModelOf(entradasCintura) }
-
-    val corPeso = MaterialTheme.colorScheme.primary
-    val corCintura = MaterialTheme.colorScheme.secondary
-
-    Column(modifier = modifier.fillMaxSize().padding(16.dp)) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
         Text("Evolução", style = MaterialTheme.typography.titleLarge)
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Gráfico de Peso
+        Spacer(Modifier.height(16.dp))
         Text("Peso (kg)", style = MaterialTheme.typography.titleMedium)
-        Chart(
-            chart = lineChart(
-                lines = listOf(
-                    LineChart.LineSpec(
-                        lineColor = corPeso.value.toInt(),
-                        lineThicknessDp = 3f
-                    )
-                )
-            ),
-            model = modeloPeso,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp)
+        LineChart(
+            values = lista.map { it.peso },
+            modifier = Modifier.fillMaxWidth().height(200.dp)
         )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        // Gráfico de Cintura
+        Spacer(Modifier.height(24.dp))
         Text("Cintura (cm)", style = MaterialTheme.typography.titleMedium)
-        Chart(
-            chart = lineChart(
-                lines = listOf(
-                    LineChart.LineSpec(
-                        lineColor = corCintura.value.toInt(),
-                        lineThicknessDp = 3f
-                    )
-                )
-            ),
-            model = modeloCintura,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp)
+        val cintura = lista.map { it.cintura }.filter { it > 0f }
+        if (cintura.size >= 2) {
+            LineChart(
+                values = cintura,
+                modifier = Modifier.fillMaxWidth().height(200.dp)
+            )
+        } else {
+            Text("Ainda não há pelo menos duas medidas de cintura.", modifier = Modifier.padding(top = 8.dp))
+        }
+    }
+}
+
+@Composable
+private fun LineChart(
+    values: List<Float>,
+    modifier: Modifier = Modifier
+) {
+    if (values.size < 2) return
+
+    Canvas(modifier = modifier.padding(vertical = 12.dp)) {
+        val minValue = values.minOrNull() ?: return@Canvas
+        val maxValue = values.maxOrNull() ?: return@Canvas
+        val range = max(0.001f, maxValue - minValue)
+        val xStep = size.width / (values.size - 1).coerceAtLeast(1)
+
+        val path = Path()
+        values.forEachIndexed { index, value ->
+            val x = index * xStep
+            val normalized = (value - minValue) / range
+            val y = size.height - normalized * size.height
+            if (index == 0) path.moveTo(x, y) else path.lineTo(x, y)
+        }
+
+        drawPath(
+            path = path,
+            color = MaterialTheme.colorScheme.primary,
+            style = androidx.compose.ui.graphics.drawscope.Stroke(width = 6f)
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
-        Text("● Peso   ● Cintura", style = MaterialTheme.typography.bodyMedium)
+        values.forEachIndexed { index, value ->
+            val x = index * xStep
+            val normalized = (value - minValue) / range
+            val y = size.height - normalized * size.height
+            drawCircle(
+                color = MaterialTheme.colorScheme.primary,
+                radius = 7f,
+                center = Offset(x, y)
+            )
+        }
     }
 }
