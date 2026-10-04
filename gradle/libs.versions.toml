@@ -1,4 +1,5 @@
 [versions]
+desugarJdkLibs = "2.0.4"
 agp = "8.7.0"
 kotlin = "2.0.21"
 ksp = "2.0.21-1.0.28"
