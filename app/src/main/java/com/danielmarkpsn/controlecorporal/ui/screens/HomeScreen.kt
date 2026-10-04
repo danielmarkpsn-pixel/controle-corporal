@@ -9,6 +9,8 @@ import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.FitnessCenter
 import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.AddAPhoto
+import androidx.compose.material.icons.filled.PictureAsPdf
 import androidx.compose.material.icons.filled.Height
 import androidx.compose.material.icons.filled.Flag
 import androidx.compose.material3.*
@@ -28,7 +30,9 @@ fun HomeScreen(
     onAdicionarMedida: () -> Unit,
     onVerHistorico: () -> Unit,
     onVerMeta: () -> Unit,
-    onVerGrafico: () -> Unit
+    onVerGrafico: () -> Unit,
+    onVerFotos: () -> Unit,
+    onVerRelatorio: () -> Unit
 ) {
     val ultimoPeso by viewModel.ultimoPeso.collectAsStateWithLifecycle()
     val meta by viewModel.meta.collectAsStateWithLifecycle()
@@ -178,6 +182,28 @@ fun HomeScreen(
                     Icon(Icons.Default.BarChart, contentDescription = null)
                     Spacer(Modifier.width(6.dp))
                     Text("Evolução")
+                }
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                OutlinedButton(
+                    onClick = onVerFotos,
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Icon(Icons.Default.AddAPhoto, contentDescription = null)
+                    Spacer(Modifier.width(6.dp))
+                    Text("Fotos")
+                }
+                OutlinedButton(
+                    onClick = onVerRelatorio,
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Icon(Icons.Default.PictureAsPdf, contentDescription = null)
+                    Spacer(Modifier.width(6.dp))
+                    Text("PDF")
                 }
             }
 
