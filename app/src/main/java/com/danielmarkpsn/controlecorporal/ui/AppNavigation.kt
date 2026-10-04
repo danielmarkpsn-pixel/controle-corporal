@@ -3,14 +3,10 @@ package com.danielmarkpsn.controlecorporal.ui.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.danielmarkpsn.controlecorporal.ControleApp
-import com.danielmarkpsn.controlecorporal.license.LicenseManager
-import com.danielmarkpsn.controlecorporal.license.LicenseScreen
 import com.danielmarkpsn.controlecorporal.ui.screens.AddMedidaScreen
 import com.danielmarkpsn.controlecorporal.ui.screens.AddPesoScreen
 import com.danielmarkpsn.controlecorporal.ui.screens.GraficoScreen
@@ -20,7 +16,6 @@ import com.danielmarkpsn.controlecorporal.ui.screens.MetaScreen
 import com.danielmarkpsn.controlecorporal.viewmodel.ControleViewModel
 
 object Rotas {
-    const val LICENSE = "license"
     const val HOME = "home"
     const val ADD_PESO = "add_peso"
     const val ADD_MEDIDA = "add_medida"
@@ -32,21 +27,13 @@ object Rotas {
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
-    val app = LocalContext.current.applicationContext as ControleApp
+    val context = androidx.compose.ui.platform.LocalContext.current.applicationContext as com.danielmarkpsn.controlecorporal.ControleApp
 
     val viewModel: ControleViewModel = viewModel(
-        factory = ControleViewModel.Factory(app.container.repository)
+        factory = ControleViewModel.Factory(context.container.repository)
     )
 
-    NavHost(navController = navController, startDestination = if (LicenseManager.isLicensed(app)) Rotas.HOME else Rotas.LICENSE) {
-
-        composable(Rotas.LICENSE) {
-            LicenseScreen(onActivated = {
-                navController.navigate(Rotas.HOME) {
-                    popUpTo(Rotas.LICENSE) { inclusive = true }
-                }
-            })
-        }
+    NavHost(navController = navController, startDestination = Rotas.HOME) {
 
         composable(Rotas.HOME) {
             HomeScreen(
