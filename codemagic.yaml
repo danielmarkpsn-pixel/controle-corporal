@@ -1,6 +1,6 @@
 workflows:
   android-release:
-    name: Controle Corporal - Release
+    name: Controle Corporal - APK Pessoal
     max_build_duration: 120
     instance_type: mac_mini_m2
 
@@ -39,14 +39,9 @@ workflows:
         script: |
           ./gradlew clean --refresh-dependencies
 
-      - name: Build do AAB de release
-        script: |
-          ./gradlew bundleRelease --refresh-dependencies
-
-      - name: Build do APK de teste
+      - name: Build do APK pessoal
         script: |
           ./gradlew assembleRelease --refresh-dependencies
 
     artifacts:
-      - app/build/outputs/**/*.aab
       - app/build/outputs/**/*.apk
