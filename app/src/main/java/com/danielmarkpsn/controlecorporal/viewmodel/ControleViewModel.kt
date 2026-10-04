@@ -7,7 +7,7 @@ import com.danielmarkpsn.controlecorporal.data.ControleRepository
 import com.danielmarkpsn.controlecorporal.data.MedidaEntity
 import com.danielmarkpsn.controlecorporal.data.MetaEntity
 import com.danielmarkpsn.controlecorporal.data.PesoEntity
-import com.danielmarkpsn.controlecorporal.ui.model.Medicao
+import com.danielmarkpsn.controlecorporal.data.Medicao
 import java.util.Calendar
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
