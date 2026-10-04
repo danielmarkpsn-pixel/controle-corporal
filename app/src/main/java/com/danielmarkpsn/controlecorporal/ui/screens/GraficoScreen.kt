@@ -89,7 +89,7 @@ private fun LineChart(
             val normalized = (value - minValue) / range
             val y = size.height - normalized * size.height
             drawCircle(
-                color = MaterialTheme.colorScheme.primary,
+                color = primaryColor,
                 radius = 7f,
                 center = Offset(x, y)
             )
