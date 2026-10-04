@@ -20,6 +20,7 @@ import java.util.Locale
 @Composable
 fun HistoricoScreen(
     medicoes: List<Medicao>,
+    onVoltar: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val lista = medicoes.sortedByDescending { it.data }
@@ -29,7 +30,7 @@ fun HistoricoScreen(
             TopAppBar(
                 title = { Text("Histórico") },
                 navigationIcon = {
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = onVoltar) {
                         Icon(Icons.Default.ArrowBack, contentDescription = null)
                     }
                 }
