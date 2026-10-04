@@ -76,8 +76,7 @@ fun AppNavigation() {
         composable(Rotas.HISTORICO) {
             val medicoes by viewModel.medicoes.collectAsStateWithLifecycle()
             HistoricoScreen(
-                medicoes = medicoes,
-                onVoltar = { navController.popBackStack() }
+                medicoes = medicoes
             )
         }
 
