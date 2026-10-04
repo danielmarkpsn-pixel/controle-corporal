@@ -13,6 +13,8 @@ import com.danielmarkpsn.controlecorporal.ui.screens.GraficoScreen
 import com.danielmarkpsn.controlecorporal.ui.screens.HistoricoScreen
 import com.danielmarkpsn.controlecorporal.ui.screens.HomeScreen
 import com.danielmarkpsn.controlecorporal.ui.screens.MetaScreen
+import com.danielmarkpsn.controlecorporal.ui.screens.PhotosScreen
+import com.danielmarkpsn.controlecorporal.ui.screens.RelatorioScreen
 import com.danielmarkpsn.controlecorporal.viewmodel.ControleViewModel
 
 object Rotas {
@@ -22,6 +24,8 @@ object Rotas {
     const val HISTORICO = "historico"
     const val META = "meta"
     const val GRAFICO = "grafico"
+    const val FOTOS = "fotos"
+    const val RELATORIO = "relatorio"
 }
 
 @Composable
@@ -78,7 +82,22 @@ fun AppNavigation() {
         composable(Rotas.GRAFICO) {
             val medicoes by viewModel.medicoes.collectAsStateWithLifecycle()
             GraficoScreen(
-                medicoes = medicoes
+                medicoes = medicoes,
+                onVoltar = { navController.popBackStack() }
+            )
+        }
+
+        composable(Rotas.FOTOS) {
+            PhotosScreen(onVoltar = { navController.popBackStack() })
+        }
+
+        composable(Rotas.RELATORIO) {
+            val medicoes by viewModel.medicoes.collectAsStateWithLifecycle()
+            val meta by viewModel.meta.collectAsStateWithLifecycle()
+            RelatorioScreen(
+                medicoes = medicoes,
+                meta = meta,
+                onVoltar = { navController.popBackStack() }
             )
         }
     }
