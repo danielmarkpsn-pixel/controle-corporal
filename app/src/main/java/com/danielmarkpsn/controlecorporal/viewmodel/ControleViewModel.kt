@@ -40,33 +40,44 @@ class ControleViewModel(
         repository.listarPesosCronologico(),
         repository.listarMedidas()
     ) { pesos, medidas ->
-        fun dia(timestamp: Long): IntArray {
+        fun chaveDia(timestamp: Long): String {
             val calendar = Calendar.getInstance().apply { timeInMillis = timestamp }
-            return intArrayOf(
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.DAY_OF_YEAR)
-            )
+            return "${calendar.get(Calendar.YEAR)}-${calendar.get(Calendar.DAY_OF_YEAR)}"
         }
 
-        val medidasPorDia = medidas.groupBy { dia(it.data).contentToString() }
+        val pesosPorDia = pesos.groupBy { chaveDia(it.data) }
+        val medidasPorDia = medidas.groupBy { chaveDia(it.data) }
 
-        pesos.map { peso ->
-            val medidasDoDia = medidasPorDia[dia(peso.data).contentToString()].orEmpty()
+        // O histórico deve existir mesmo quando o usuário registrou apenas medidas,
+        // sem precisar ter um peso lançado no mesmo dia.
+        val dias = (pesosPorDia.keys + medidasPorDia.keys).toSet()
+
+        dias.mapNotNull { chave ->
+            val peso = pesosPorDia[chave].orEmpty().maxByOrNull { it.data }
+            val medidasDoDia = medidasPorDia[chave].orEmpty()
+
+            fun medida(vararg nomes: String): Float =
+                medidasDoDia.firstOrNull { item ->
+                    nomes.any { nome -> item.tipo.equals(nome, ignoreCase = true) }
+                }?.valorCm ?: 0f
+
+            val data = peso?.data ?: medidasDoDia.maxOfOrNull { it.data } ?: return@mapNotNull null
+
             Medicao(
-                data = peso.data,
-                peso = peso.pesoKg,
-                cintura = medidasDoDia.find { it.tipo.equals("cintura", ignoreCase = true) }?.valorCm ?: 0f,
-                abdomen = medidasDoDia.find { it.tipo.equals("abdômen", ignoreCase = true) || it.tipo.equals("abdomen", ignoreCase = true) }?.valorCm ?: 0f,
-                quadril = medidasDoDia.find { it.tipo.equals("quadril", ignoreCase = true) }?.valorCm ?: 0f,
-                peito = medidasDoDia.find { it.tipo.equals("Peito", ignoreCase = true) }?.valorCm ?: 0f,
-                bracoDireito = medidasDoDia.find { it.tipo.equals("Braço direito", ignoreCase = true) }?.valorCm ?: 0f,
-                bracoEsquerdo = medidasDoDia.find { it.tipo.equals("Braço esquerdo", ignoreCase = true) }?.valorCm ?: 0f,
-                coxaDireita = medidasDoDia.find { it.tipo.equals("Coxa direita", ignoreCase = true) }?.valorCm ?: 0f,
-                coxaEsquerda = medidasDoDia.find { it.tipo.equals("Coxa esquerda", ignoreCase = true) }?.valorCm ?: 0f,
-                panturrilhaDireita = medidasDoDia.find { it.tipo.equals("Panturrilha direita", ignoreCase = true) }?.valorCm ?: 0f,
-                panturrilhaEsquerda = medidasDoDia.find { it.tipo.equals("Panturrilha esquerda", ignoreCase = true) }?.valorCm ?: 0f
+                data = data,
+                peso = peso?.pesoKg ?: 0f,
+                cintura = medida("cintura"),
+                abdomen = medida("abdômen", "abdomen"),
+                quadril = medida("quadril"),
+                peito = medida("peito"),
+                bracoDireito = medida("braço direito", "braco direito"),
+                bracoEsquerdo = medida("braço esquerdo", "braco esquerdo"),
+                coxaDireita = medida("coxa direita"),
+                coxaEsquerda = medida("coxa esquerda"),
+                panturrilhaDireita = medida("panturrilha direita"),
+                panturrilhaEsquerda = medida("panturrilha esquerda")
             )
-        }
+        }.sortedBy { it.data }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     // IMC calculado a partir do último peso + altura da meta
