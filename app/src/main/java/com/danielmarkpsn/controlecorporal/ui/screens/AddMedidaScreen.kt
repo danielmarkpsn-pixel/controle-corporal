@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.danielmarkpsn.controlecorporal.viewmodel.ControleViewModel
 
 private val tiposPredefinidos = listOf(
-    "Cintura", "Quadril", "Peito",
+    "Cintura", "Abdômen", "Quadril", "Peito",
     "Braço direito", "Braço esquerdo",
     "Coxa direita", "Coxa esquerda",
     "Panturrilha direita", "Panturrilha esquerda"
