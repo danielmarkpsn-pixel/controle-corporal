@@ -20,7 +20,7 @@ private val tiposPredefinidos = listOf(
     "Cintura", "Quadril", "Peito",
     "Braço direito", "Braço esquerdo",
     "Coxa direita", "Coxa esquerda",
-    "Panturrilha"
+    "Panturrilha direita", "Panturrilha esquerda"
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
