@@ -9,5 +9,7 @@ data class Medicao(
     val bracoDireito: Float,
     val bracoEsquerdo: Float,
     val coxaDireita: Float,
-    val coxaEsquerda: Float
+    val coxaEsquerda: Float,
+    val panturrilhaDireita: Float,
+    val panturrilhaEsquerda: Float
 )
