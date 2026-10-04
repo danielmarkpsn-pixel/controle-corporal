@@ -3,85 +3,54 @@ package com.danielmarkpsn.controlecorporal.ui.screens
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.danielmarkpsn.controlecorporal.viewmodel.ControleViewModel
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import com.danielmarkpsn.controlecorporal.data.Medicao
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HistoricoScreen(
-    viewModel: ControleViewModel,
-    onVoltar: () -> Unit
+    medicoes: List<Medicao>,
+    modifier: Modifier = Modifier
 ) {
-    val pesos by viewModel.pesos.collectAsStateWithLifecycle()
-    val formatador = remember { SimpleDateFormat("dd/MM/yyyy", Locale("pt", "BR")) }
+    val listaOrdenada = remember(medicoes) {
+        medicoes.sortedByDescending { it.data }
+    }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Histórico") },
-                navigationIcon = {
-                    IconButton(onClick = onVoltar) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Voltar")
-                    }
-                }
+    if (listaOrdenada.isEmpty()) {
+        Box(
+            modifier = modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "Nenhuma medição registrada ainda.",
+                style = MaterialTheme.typography.bodyLarge
             )
         }
-    ) { padding ->
-        if (pesos.isEmpty()) {
-            Box(
-                modifier = Modifier
-                    .padding(padding)
-                    .fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text("Nenhum registro ainda")
-            }
-        } else {
-            LazyColumn(
-                modifier = Modifier
-                    .padding(padding)
-                    .fillMaxSize(),
-                contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(pesos, key = { it.id }) { peso ->
-                    Card(modifier = Modifier.fillMaxWidth()) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(12.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Column {
-                                Text(
-                                    text = "%.1f kg".format(peso.pesoKg),
-                                    style = MaterialTheme.typography.titleLarge
-                                )
-                                Text(
-                                    text = formatador.format(Date(peso.data)),
-                                    style = MaterialTheme.typography.bodyMedium
-                                )
-                                peso.observacao?.let {
-                                    Text(text = it, style = MaterialTheme.typography.labelSmall)
-                                }
-                            }
-                            IconButton(onClick = { viewModel.removerPeso(peso) }) {
-                                Icon(Icons.Default.Delete, contentDescription = "Remover")
-                            }
-                        }
+    } else {
+        LazyColumn(
+            modifier = modifier.fillMaxSize(),
+            contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(listaOrdenada) { medicao ->
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                ) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Text(
+                            text = medicao.data.toString(),
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(text = "Peso: ${medicao.peso} kg")
+                        Text(text = "Cintura: ${medicao.cintura} cm")
+                        Text(text = "Quadril: ${medicao.quadril} cm")
+                        Text(text = "Peito: ${medicao.peito} cm")
+                        Text(text = "Braço: ${medicao.braco} cm")
                     }
                 }
             }
