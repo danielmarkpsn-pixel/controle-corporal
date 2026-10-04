@@ -76,6 +76,8 @@ fun HistoricoScreen(
                             MeasureLine("Braço esquerdo", medicao.bracoEsquerdo)
                             MeasureLine("Coxa direita", medicao.coxaDireita)
                             MeasureLine("Coxa esquerda", medicao.coxaEsquerda)
+                            MeasureLine("Panturrilha direita", medicao.panturrilhaDireita)
+                            MeasureLine("Panturrilha esquerda", medicao.panturrilhaEsquerda)
                         }
                     }
                 }
