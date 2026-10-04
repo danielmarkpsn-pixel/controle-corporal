@@ -88,6 +88,7 @@ private fun gerarPdf(medicoes: List<Medicao>, meta: MetaEntity?): ByteArray {
     medicoes.sortedBy { it.data }.forEach { m ->
         line("${date.format(Date(m.data))}  |  Peso: %.1f kg".format(m.peso))
         if (m.cintura > 0) line("  Cintura: %.1f cm".format(m.cintura))
+        if (m.abdomen > 0) line("  Abdômen: %.1f cm".format(m.abdomen))
         if (m.quadril > 0) line("  Quadril: %.1f cm".format(m.quadril))
         if (m.peito > 0) line("  Peito: %.1f cm".format(m.peito))
         if (m.bracoDireito > 0 || m.bracoEsquerdo > 0) line("  Braços: D %.1f | E %.1f cm".format(m.bracoDireito, m.bracoEsquerdo))
