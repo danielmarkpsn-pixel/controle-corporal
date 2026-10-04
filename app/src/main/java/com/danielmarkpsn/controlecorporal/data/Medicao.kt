@@ -6,5 +6,8 @@ data class Medicao(
     val cintura: Float,
     val quadril: Float,
     val peito: Float,
-    val braco: Float
+    val bracoDireito: Float,
+    val bracoEsquerdo: Float,
+    val coxaDireita: Float,
+    val coxaEsquerda: Float
 )
