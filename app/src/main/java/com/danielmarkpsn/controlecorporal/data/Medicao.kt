@@ -4,6 +4,7 @@ data class Medicao(
     val data: Long,
     val peso: Float,
     val cintura: Float,
+    val abdomen: Float,
     val quadril: Float,
     val peito: Float,
     val bracoDireito: Float,
