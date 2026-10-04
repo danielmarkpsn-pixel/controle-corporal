@@ -46,7 +46,9 @@ fun AppNavigation() {
                 onAdicionarMedida = { navController.navigate(Rotas.ADD_MEDIDA) },
                 onVerHistorico = { navController.navigate(Rotas.HISTORICO) },
                 onVerMeta = { navController.navigate(Rotas.META) },
-                onVerGrafico = { navController.navigate(Rotas.GRAFICO) }
+                onVerGrafico = { navController.navigate(Rotas.GRAFICO) },
+                onVerFotos = { navController.navigate(Rotas.FOTOS) },
+                onVerRelatorio = { navController.navigate(Rotas.RELATORIO) }
             )
         }
 
