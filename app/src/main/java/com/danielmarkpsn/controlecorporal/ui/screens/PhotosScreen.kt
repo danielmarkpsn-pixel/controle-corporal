@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -37,7 +38,7 @@ fun PhotosScreen(onVoltar: () -> Unit) {
         photos = (photos + uri.toString()).distinct()
         savePhotos(context, photos)
     }
-    fun escolher() = picker.launch(ActivityResultContracts.PickVisualMedia.SingleMimeType("image/*"))
+    fun escolher() = picker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
 
     Scaffold(
         topBar = {
