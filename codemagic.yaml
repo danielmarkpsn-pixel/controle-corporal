@@ -28,17 +28,13 @@ workflows:
         script: |
           echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/local.properties"
 
-      - name: Dar permissão ao gradlew
-        script: |
-          chmod +x ./gradlew
-
       - name: Limpar caches
         script: |
-          ./gradlew clean
+          gradle clean
 
       - name: Build do APK pessoal
         script: |
-          ./gradlew assembleRelease
+          gradle assembleRelease
 
     artifacts:
       - app/build/outputs/**/*.apk
