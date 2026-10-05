@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.FitnessCenter
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -51,13 +52,17 @@ private val capitulos = listOf("Todos", "Ombros", "Tórax", "Costas", "Braços",
 @Composable
 fun AnatomiaScreen(onVoltar: () -> Unit) {
     var filtro by remember { mutableStateOf("Todos") }
+    var busca by remember { mutableStateOf("") }
     var selecionado by remember { mutableStateOf<ExercicioAnatomia?>(null) }
-    val lista = if (filtro == "Todos") exercicios else exercicios.filter { it.grupo == filtro }
+    val lista = exercicios.filter { e ->
+        (filtro == "Todos" || e.grupo == filtro) &&
+            (busca.isBlank() || e.nome.contains(busca, ignoreCase = true) || e.foco.contains(busca, ignoreCase = true))
+    }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Anatomia da musculação", fontWeight = FontWeight.Bold) },
+                title = { Text("Biblioteca de exercícios", fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = onVoltar) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Voltar")
@@ -74,11 +79,22 @@ fun AnatomiaScreen(onVoltar: () -> Unit) {
             item {
                 Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)) {
                     Column(Modifier.padding(18.dp)) {
-                        Text("📚 Biblioteca anatômica", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+                        Text("🏋️ Biblioteca de exercícios", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
                         Spacer(Modifier.height(6.dp))
-                        Text("Conteúdo organizado a partir do material de Anatomia da Musculação fornecido, com descrições resumidas e adaptadas para uso no aplicativo.")
+                        Text("Encontre um exercício por grupo muscular, veja os músculos envolvidos e abra a ficha com técnica e cuidados.")
                     }
                 }
+            }
+            item {
+                OutlinedTextField(
+                    value = busca,
+                    onValueChange = { busca = it },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true,
+                    leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+                    placeholder = { Text("Buscar exercício ou músculo") },
+                    label = { Text("Pesquisar") }
+                )
             }
             item {
                 Text("Grupos musculares", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
@@ -101,7 +117,7 @@ fun AnatomiaScreen(onVoltar: () -> Unit) {
                 }
             }
             item {
-                Text(lista.size.toString() + " exercícios disponíveis", style = MaterialTheme.typography.labelLarge)
+                Text(lista.size.toString() + " exercícios disponíveis", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
             }
             items(lista) { e ->
                 Card(onClick = { selecionado = e }, modifier = Modifier.fillMaxWidth()) {
