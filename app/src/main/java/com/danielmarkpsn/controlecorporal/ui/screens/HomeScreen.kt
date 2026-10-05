@@ -33,7 +33,8 @@ fun HomeScreen(
     onVerGrafico: () -> Unit,
     onVerFotos: () -> Unit,
     onVerRelatorio: () -> Unit,
-    onVerTreinos: () -> Unit
+    onVerTreinos: () -> Unit,
+    onVerAnatomia: () -> Unit
 ) {
     val ultimoPeso by viewModel.ultimoPeso.collectAsStateWithLifecycle()
     val meta by viewModel.meta.collectAsStateWithLifecycle()
@@ -168,6 +169,20 @@ fun HomeScreen(
                     Column(Modifier.weight(1f)) {
                         Text("🏋️ Treinos", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                         Text("Exercícios, musculação e programação de treino", style = MaterialTheme.typography.bodyMedium)
+                    }
+                }
+            }
+
+            Card(
+                onClick = onVerAnatomia,
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer)
+            ) {
+                Row(Modifier.padding(18.dp), horizontalArrangement = Arrangement.spacedBy(14.dp)) {
+                    Icon(Icons.Default.FitnessCenter, contentDescription = null)
+                    Column(Modifier.weight(1f)) {
+                        Text("🧠 Anatomia da musculação", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                        Text("Músculos, grupos e orientações de exercícios", style = MaterialTheme.typography.bodyMedium)
                     }
                 }
             }
