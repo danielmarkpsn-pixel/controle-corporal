@@ -192,13 +192,6 @@ private fun ListaTreinos(
                 Text("Usar um treino pronto")
             }
         }
-        item {
-            Button(onClick = { prontos = true }, modifier = Modifier.fillMaxWidth()) {
-                Icon(Icons.Default.LibraryAdd, contentDescription = null)
-                Spacer(Modifier.width(8.dp))
-                Text("Usar um treino pronto")
-            }
-        }
         if (treinos.isEmpty()) item {
             OutlinedButton(onClick = onNovo, modifier = Modifier.fillMaxWidth()) { Text("Criar meu primeiro treino") }
         }
