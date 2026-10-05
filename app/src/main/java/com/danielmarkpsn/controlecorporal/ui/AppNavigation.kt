@@ -15,6 +15,7 @@ import com.danielmarkpsn.controlecorporal.ui.screens.HomeScreen
 import com.danielmarkpsn.controlecorporal.ui.screens.MetaScreen
 import com.danielmarkpsn.controlecorporal.ui.screens.PhotosScreen
 import com.danielmarkpsn.controlecorporal.ui.screens.RelatorioScreen
+import com.danielmarkpsn.controlecorporal.ui.screens.TreinosScreen
 import com.danielmarkpsn.controlecorporal.viewmodel.ControleViewModel
 
 object Rotas {
@@ -26,6 +27,7 @@ object Rotas {
     const val GRAFICO = "grafico"
     const val FOTOS = "fotos"
     const val RELATORIO = "relatorio"
+    const val TREINOS = "treinos"
 }
 
 @Composable
@@ -48,7 +50,8 @@ fun AppNavigation() {
                 onVerMeta = { navController.navigate(Rotas.META) },
                 onVerGrafico = { navController.navigate(Rotas.GRAFICO) },
                 onVerFotos = { navController.navigate(Rotas.FOTOS) },
-                onVerRelatorio = { navController.navigate(Rotas.RELATORIO) }
+                onVerRelatorio = { navController.navigate(Rotas.RELATORIO) },
+                onVerTreinos = { navController.navigate(Rotas.TREINOS) }
             )
         }
 
@@ -91,6 +94,10 @@ fun AppNavigation() {
 
         composable(Rotas.FOTOS) {
             PhotosScreen(onVoltar = { navController.popBackStack() })
+        }
+
+        composable(Rotas.TREINOS) {
+            TreinosScreen(onVoltar = { navController.popBackStack() })
         }
 
         composable(Rotas.RELATORIO) {
