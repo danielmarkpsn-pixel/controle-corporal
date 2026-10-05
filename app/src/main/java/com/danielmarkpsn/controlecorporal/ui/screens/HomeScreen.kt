@@ -32,7 +32,8 @@ fun HomeScreen(
     onVerMeta: () -> Unit,
     onVerGrafico: () -> Unit,
     onVerFotos: () -> Unit,
-    onVerRelatorio: () -> Unit
+    onVerRelatorio: () -> Unit,
+    onVerTreinos: () -> Unit
 ) {
     val ultimoPeso by viewModel.ultimoPeso.collectAsStateWithLifecycle()
     val meta by viewModel.meta.collectAsStateWithLifecycle()
@@ -153,6 +154,20 @@ fun HomeScreen(
                             if (atual <= alvo) "Meta atingida!" else "Faltam %.1f kg".format(atual - alvo),
                             style = MaterialTheme.typography.bodyMedium
                         )
+                    }
+                }
+            }
+
+            Card(
+                onClick = onVerTreinos,
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+            ) {
+                Row(Modifier.padding(18.dp), horizontalArrangement = Arrangement.spacedBy(14.dp)) {
+                    Icon(Icons.Default.FitnessCenter, contentDescription = null)
+                    Column(Modifier.weight(1f)) {
+                        Text("🏋️ Treinos", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                        Text("Exercícios, musculação e programação de treino", style = MaterialTheme.typography.bodyMedium)
                     }
                 }
             }
