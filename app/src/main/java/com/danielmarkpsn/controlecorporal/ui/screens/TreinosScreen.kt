@@ -77,8 +77,8 @@ private fun ficha(nome: String): Ficha {
     }
 }
 
-$OptIn(ExperimentalMaterial3Api::class)
-$Composable
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
 fun TreinosScreen(onVoltar: () -> Unit) {
     val context = LocalContext.current
     val storage = remember { TreinoStorage(context) }
@@ -151,7 +151,7 @@ fun TreinosScreen(onVoltar: () -> Unit) {
     )
 }
 
-$Composable
+@Composable
 private fun ListaTreinos(
     treinos: List<Treino>, p: PaddingValues, onNovo: () -> Unit,
     onOpen: (Treino) -> Unit, onStart: (Treino) -> Unit
@@ -191,7 +191,7 @@ private fun ListaTreinos(
     }
 }
 
-$Composable
+@Composable
 private fun SemanaTreinos(treinos: List<Treino>, p: PaddingValues, onOpen: (Treino) -> Unit) {
     LazyColumn(
         Modifier.padding(p).fillMaxSize(),
@@ -222,7 +222,7 @@ private fun SemanaTreinos(treinos: List<Treino>, p: PaddingValues, onOpen: (Trei
     }
 }
 
-$Composable
+@Composable
 private fun HistoricoTreinos(h: List<TreinoHistorico>, p: PaddingValues) {
     val volume = h.sumOf { it.volume.toDouble() }.toFloat()
     LazyColumn(
@@ -254,8 +254,8 @@ private fun HistoricoTreinos(h: List<TreinoHistorico>, p: PaddingValues) {
     }
 }
 
-$OptIn(ExperimentalMaterial3Api::class)
-$Composable
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
 private fun NovoTreinoDialog(onClose: () -> Unit, onCreate: (String, String) -> Unit) {
     var nome by remember { mutableStateOf("Treino A") }
     var objetivo by remember { mutableStateOf("Hipertrofia") }
@@ -278,8 +278,8 @@ private fun NovoTreinoDialog(onClose: () -> Unit, onCreate: (String, String) -> 
     )
 }
 
-$OptIn(ExperimentalMaterial3Api::class)
-$Composable
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
 private fun EditorTreino(
     treino: Treino, onBack: () -> Unit, onStart: () -> Unit, onSave: (Treino) -> Unit
 ) {
@@ -342,8 +342,8 @@ private fun EditorTreino(
     if (info != null) ExerciseInfoDialog(info!!) { info = null }
 }
 
-$OptIn(ExperimentalMaterial3Api::class)
-$Composable
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
 private fun AddExerciseDialog(onClose: () -> Unit, onAdd: (TreinoExercicio) -> Unit) {
     var nome by remember { mutableStateOf("") }
     var musculo by remember { mutableStateOf("") }
@@ -383,7 +383,7 @@ private fun AddExerciseDialog(onClose: () -> Unit, onAdd: (TreinoExercicio) -> U
     )
 }
 
-$Composable
+@Composable
 private fun ExerciseInfoDialog(e: TreinoExercicio, onClose: () -> Unit) {
     val f = ficha(e.nome)
     AlertDialog(
@@ -405,8 +405,8 @@ private fun ExerciseInfoDialog(e: TreinoExercicio, onClose: () -> Unit) {
     )
 }
 
-$OptIn(ExperimentalMaterial3Api::class)
-$Composable
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
 private fun ExecucaoTreino(treino: Treino, onBack: () -> Unit, onFinish: (TreinoHistorico) -> Unit) {
     val inicio = remember { System.currentTimeMillis() }
     var feitas by remember { mutableStateOf<Map<Int, Int>>(emptyMap()) }
