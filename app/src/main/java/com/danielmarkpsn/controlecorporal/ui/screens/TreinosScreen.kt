@@ -523,7 +523,7 @@ private fun ExecucaoTreino(treino: Treino, onBack: () -> Unit, onFinish: (Treino
 }
 
 @Composable
-private fun ExercicioVisual(nome: String, musculo: String, modifier: Modifier = Modifier) {
+fun ExercicioVisual(nome: String, musculo: String, modifier: Modifier = Modifier) {
     val primary = MaterialTheme.colorScheme.primary
     val secondary = MaterialTheme.colorScheme.secondary
     Surface(
