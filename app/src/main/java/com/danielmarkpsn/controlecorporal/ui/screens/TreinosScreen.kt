@@ -139,7 +139,7 @@ fun TreinosScreen(onVoltar: () -> Unit) {
         }
     ) { p ->
         when (aba) {
-            0 -> ListaTreinos(treinos, p, { novo = true }, { aberto = it }, { executando = it })
+            0 -> ListaTreinos(treinos, p, { novo = true }, { aberto = it }, { executando = it }, { prontos = true })
             1 -> SemanaTreinos(treinos, p) { aberto = it }
             else -> HistoricoTreinos(historico, p)
         }
@@ -170,7 +170,7 @@ fun TreinosScreen(onVoltar: () -> Unit) {
 @Composable
 private fun ListaTreinos(
     treinos: List<Treino>, p: PaddingValues, onNovo: () -> Unit,
-    onOpen: (Treino) -> Unit, onStart: (Treino) -> Unit
+    onOpen: (Treino) -> Unit, onStart: (Treino) -> Unit, onProntos: () -> Unit
 ) {
     LazyColumn(
         Modifier.padding(p).fillMaxSize(),
@@ -186,7 +186,7 @@ private fun ListaTreinos(
             }
         }
         item {
-            Button(onClick = { prontos = true }, modifier = Modifier.fillMaxWidth()) {
+            Button(onClick = onProntos, modifier = Modifier.fillMaxWidth()) {
                 Icon(Icons.Default.LibraryAdd, contentDescription = null)
                 Spacer(Modifier.width(8.dp))
                 Text("Usar um treino pronto")
