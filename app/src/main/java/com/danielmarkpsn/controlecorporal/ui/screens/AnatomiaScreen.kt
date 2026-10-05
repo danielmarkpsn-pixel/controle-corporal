@@ -109,11 +109,12 @@ fun AnatomiaScreen(onVoltar: () -> Unit) {
                         ExercicioVisual(e.nome, e.grupo, Modifier.fillMaxWidth())
                         Spacer(Modifier.height(10.dp))
                         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                        Icon(Icons.Default.FitnessCenter, contentDescription = null)
-                        Column(Modifier.weight(1f)) {
-                            Text(e.nome, fontWeight = FontWeight.Bold)
-                            Text(e.grupo, style = MaterialTheme.typography.labelMedium)
-                            Text(e.foco, style = MaterialTheme.typography.bodySmall)
+                            Icon(Icons.Default.FitnessCenter, contentDescription = null)
+                            Column(Modifier.weight(1f)) {
+                                Text(e.nome, fontWeight = FontWeight.Bold)
+                                Text(e.grupo, style = MaterialTheme.typography.labelMedium)
+                                Text(e.foco, style = MaterialTheme.typography.bodySmall)
+                            }
                         }
                     }
                 }
