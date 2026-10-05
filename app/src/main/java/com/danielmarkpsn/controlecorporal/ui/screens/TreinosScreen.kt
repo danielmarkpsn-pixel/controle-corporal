@@ -8,12 +8,16 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
+import androidx.compose.foundation.Image
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import com.danielmarkpsn.controlecorporal.R
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.danielmarkpsn.controlecorporal.data.*
@@ -524,38 +528,17 @@ private fun ExecucaoTreino(treino: Treino, onBack: () -> Unit, onFinish: (Treino
 
 @Composable
 fun ExercicioVisual(nome: String, musculo: String, modifier: Modifier = Modifier) {
-    val primary = MaterialTheme.colorScheme.primary
-    val secondary = MaterialTheme.colorScheme.secondary
-    Surface(
-        modifier = modifier.height(150.dp),
-        shape = RoundedCornerShape(18.dp),
-        color = MaterialTheme.colorScheme.surfaceVariant
-    ) {
-        Box(Modifier.fillMaxSize()) {
-            Canvas(Modifier.fillMaxSize()) {
-                val cx = size.width * 0.5f
-                val top = size.height * 0.18f
-                drawCircle(primary, radius = size.minDimension * 0.075f, center = androidx.compose.ui.geometry.Offset(cx, top))
-                drawLine(primary, androidx.compose.ui.geometry.Offset(cx, top + 18f), androidx.compose.ui.geometry.Offset(cx, size.height * 0.64f), strokeWidth = 10f)
-                drawLine(primary, androidx.compose.ui.geometry.Offset(cx, size.height * 0.34f), androidx.compose.ui.geometry.Offset(size.width * 0.35f, size.height * 0.49f), strokeWidth = 8f)
-                drawLine(primary, androidx.compose.ui.geometry.Offset(cx, size.height * 0.34f), androidx.compose.ui.geometry.Offset(size.width * 0.65f, size.height * 0.49f), strokeWidth = 8f)
-                drawLine(primary, androidx.compose.ui.geometry.Offset(cx, size.height * 0.64f), androidx.compose.ui.geometry.Offset(size.width * 0.40f, size.height * 0.88f), strokeWidth = 9f)
-                drawLine(primary, androidx.compose.ui.geometry.Offset(cx, size.height * 0.64f), androidx.compose.ui.geometry.Offset(size.width * 0.60f, size.height * 0.88f), strokeWidth = 9f)
-                if (nome.lowercase().contains("supino") || nome.lowercase().contains("crucifixo")) {
-                    drawLine(secondary, androidx.compose.ui.geometry.Offset(size.width * 0.20f, size.height * 0.56f), androidx.compose.ui.geometry.Offset(size.width * 0.80f, size.height * 0.56f), strokeWidth = 12f)
-                } else if (nome.lowercase().contains("agachamento") || nome.lowercase().contains("leg press")) {
-                    drawLine(secondary, androidx.compose.ui.geometry.Offset(size.width * 0.25f, size.height * 0.25f), androidx.compose.ui.geometry.Offset(size.width * 0.75f, size.height * 0.25f), strokeWidth = 9f)
-                } else if (nome.lowercase().contains("remada") || nome.lowercase().contains("puxada")) {
-                    drawLine(secondary, androidx.compose.ui.geometry.Offset(size.width * 0.18f, size.height * 0.72f), androidx.compose.ui.geometry.Offset(size.width * 0.82f, size.height * 0.72f), strokeWidth = 7f)
-                } else {
-                    drawCircle(secondary, radius = size.minDimension * 0.22f, center = androidx.compose.ui.geometry.Offset(cx, size.height * 0.45f), style = Stroke(width = 3f))
-                }
-            }
-            Column(
-                Modifier.align(Alignment.BottomStart).padding(10.dp)
-            ) {
-                Text(nome, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleSmall)
-                Text(musculo, style = MaterialTheme.typography.labelSmall)
+    Card(modifier = modifier) {
+        Column {
+            Image(
+                painter = painterResource(id = R.drawable.biblioteca_mascote),
+                contentDescription = "Demonstração visual de $nome",
+                modifier = Modifier.fillMaxWidth().height(130.dp),
+                contentScale = ContentScale.Crop
+            )
+            Column(Modifier.padding(12.dp)) {
+                Text(nome, fontWeight = FontWeight.Bold)
+                Text(musculo, style = MaterialTheme.typography.labelMedium)
             }
         }
     }
