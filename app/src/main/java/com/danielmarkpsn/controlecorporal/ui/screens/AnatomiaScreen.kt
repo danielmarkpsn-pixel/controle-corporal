@@ -105,7 +105,10 @@ fun AnatomiaScreen(onVoltar: () -> Unit) {
             }
             items(lista) { e ->
                 Card(onClick = { selecionado = e }, modifier = Modifier.fillMaxWidth()) {
-                    Row(Modifier.padding(14.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Column(Modifier.padding(12.dp)) {
+                        ExercicioVisual(e.nome, e.grupo, Modifier.fillMaxWidth())
+                        Spacer(Modifier.height(10.dp))
+                        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                         Icon(Icons.Default.FitnessCenter, contentDescription = null)
                         Column(Modifier.weight(1f)) {
                             Text(e.nome, fontWeight = FontWeight.Bold)
@@ -124,6 +127,7 @@ fun AnatomiaScreen(onVoltar: () -> Unit) {
             title = { Text(e.nome) },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    ExercicioVisual(e.nome, e.grupo, Modifier.fillMaxWidth())
                     Text("Grupo: " + e.grupo, fontWeight = FontWeight.Bold)
                     Text("Foco anatômico", fontWeight = FontWeight.Bold)
                     Text(e.foco)
