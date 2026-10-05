@@ -36,7 +36,7 @@ private val exercicios = listOf(
     ExercicioAnatomia("Tríceps na polia", "Braços", "Tríceps", "Mantenha os cotovelos estáveis e estenda os antebraços de forma controlada.", "Evite abrir os cotovelos ou usar o tronco para empurrar.")
 )
 
-private val capitulos = listOf("Todos", "Ombros", "Tórax", "Costas", "Braços", "Pernas", "Abdominais")
+private val capitulos = listOf("Todos", "Pernas", "Peito", "Costas", "Ombros", "Braços")
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
