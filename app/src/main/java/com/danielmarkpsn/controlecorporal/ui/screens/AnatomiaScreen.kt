@@ -47,6 +47,16 @@ private val exercicios = listOf(
 
 private val capitulos = listOf("Todos", "Ombros", "Tórax", "Costas", "Braços", "Pernas", "Abdominais")
 
+@Composable
+fun ExercicioVisual(nome: String, musculo: String, modifier: Modifier = Modifier) {
+    Card(modifier = modifier) {
+        Column(Modifier.padding(14.dp)) {
+            Text(nome, fontWeight = FontWeight.Bold)
+            Text(musculo, style = MaterialTheme.typography.labelMedium)
+        }
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AnatomiaScreen(onVoltar: () -> Unit) {
