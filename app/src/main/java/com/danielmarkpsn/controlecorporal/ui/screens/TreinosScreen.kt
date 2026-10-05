@@ -170,7 +170,7 @@ private fun ListaTreinos(
             }
         }
         if (treinos.isEmpty()) item {
-            OutlinedButton(onClick = onNovo, Modifier.fillMaxWidth()) { Text("Criar meu primeiro treino") }
+            OutlinedButton(onClick = onNovo, modifier = Modifier.fillMaxWidth()) { Text("Criar meu primeiro treino") }
         }
         items(treinos) { t ->
             Card(Modifier.fillMaxWidth()) {
@@ -209,7 +209,7 @@ private fun SemanaTreinos(treinos: List<Treino>, p: PaddingValues, onOpen: (Trei
                     Text(dia, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                     if (lista.isEmpty()) Text("Descanso / nenhum treino programado.")
                     lista.forEach { t ->
-                        TextButton(onClick = { onOpen(t) }, Modifier.fillMaxWidth()) {
+                        TextButton(onClick = { onOpen(t) }, modifier = Modifier.fillMaxWidth()) {
                             Column(Modifier.fillMaxWidth()) {
                                 Text(t.nome, fontWeight = FontWeight.Bold)
                                 Text("${t.objetivo} • ${t.exercicios.size} exercícios")
@@ -473,7 +473,7 @@ private fun ExecucaoTreino(treino: Treino, onBack: () -> Unit, onFinish: (Treino
                             enabled = feitasEx < e.series,
                             modifier = Modifier.fillMaxWidth()
                         ) { Text(if (feitasEx < e.series) "Registrar série ${feitasEx + 1}" else "Exercício concluído") }
-                        TextButton(onClick = { descanso = 90 }, Modifier.fillMaxWidth()) { Text("⏱ Descanso 90 segundos") }
+                        TextButton(onClick = { descanso = 90 }, modifier = Modifier.fillMaxWidth()) { Text("⏱ Descanso 90 segundos") }
                     }
                 }
             }
@@ -486,7 +486,7 @@ private fun ExecucaoTreino(treino: Treino, onBack: () -> Unit, onFinish: (Treino
                             volume, exerciciosConcluidos, concluidas
                         ))
                     },
-                    Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth()
                 ) { Text("FINALIZAR E SALVAR TREINO") }
             }
         }
