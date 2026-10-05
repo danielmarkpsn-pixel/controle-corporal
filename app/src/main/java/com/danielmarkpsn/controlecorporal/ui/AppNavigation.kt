@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.danielmarkpsn.controlecorporal.ui.screens.AddMedidaScreen
+import com.danielmarkpsn.controlecorporal.ui.screens.AnatomiaScreen
 import com.danielmarkpsn.controlecorporal.ui.screens.AddPesoScreen
 import com.danielmarkpsn.controlecorporal.ui.screens.GraficoScreen
 import com.danielmarkpsn.controlecorporal.ui.screens.HistoricoScreen
@@ -28,6 +29,7 @@ object Rotas {
     const val FOTOS = "fotos"
     const val RELATORIO = "relatorio"
     const val TREINOS = "treinos"
+    const val ANATOMIA = "anatomia"
 }
 
 @Composable
@@ -51,7 +53,8 @@ fun AppNavigation() {
                 onVerGrafico = { navController.navigate(Rotas.GRAFICO) },
                 onVerFotos = { navController.navigate(Rotas.FOTOS) },
                 onVerRelatorio = { navController.navigate(Rotas.RELATORIO) },
-                onVerTreinos = { navController.navigate(Rotas.TREINOS) }
+                onVerTreinos = { navController.navigate(Rotas.TREINOS) },
+                onVerAnatomia = { navController.navigate(Rotas.ANATOMIA) }
             )
         }
 
@@ -98,6 +101,10 @@ fun AppNavigation() {
 
         composable(Rotas.TREINOS) {
             TreinosScreen(onVoltar = { navController.popBackStack() })
+        }
+
+        composable(Rotas.ANATOMIA) {
+            AnatomiaScreen(onVoltar = { navController.popBackStack() })
         }
 
         composable(Rotas.RELATORIO) {
