@@ -22,28 +22,18 @@ private data class ExercicioAnatomia(
 )
 
 private val exercicios = listOf(
-    ExercicioAnatomia("Desenvolvimento de ombros com halteres", "Ombros", "Deltóide e músculos estabilizadores", "Mantenha o tronco firme, controle a descida e evite transformar o movimento em impulso.", "Use amplitude confortável e carga compatível com a técnica."),
-    ExercicioAnatomia("Levantamento frontal", "Ombros", "Deltóide anterior", "Eleve os braços à frente com controle, mantendo o tronco estável.", "Evite balançar o corpo para vencer a carga."),
-    ExercicioAnatomia("Levantamento lateral", "Ombros", "Deltóide lateral", "Eleve os braços para os lados de forma controlada, sem acelerar a fase de retorno.", "Evite elevar a carga excessivamente."),
-    ExercicioAnatomia("Remada em pé", "Ombros", "Deltóide e trapézio", "Puxe a carga mantendo os cotovelos sob controle e o tronco estável.", "Evite usar uma carga que force compensações."),
-    ExercicioAnatomia("Supino reto", "Tórax", "Peitoral maior, tríceps e deltóide anterior", "Mantenha os pés firmes, estabilize as escápulas e desça a carga de forma controlada.", "Evite quicar a carga ou perder a posição dos ombros."),
-    ExercicioAnatomia("Supino inclinado", "Tórax", "Peitoral com ênfase superior", "Use banco inclinado e mantenha a trajetória controlada durante subida e descida.", "Ajuste o ângulo e a carga sem sacrificar a técnica."),
-    ExercicioAnatomia("Crucifixo com halteres", "Tórax", "Peitoral", "Faça uma abertura controlada e retorne aproximando os braços sem transformar o exercício em supino.", "Evite amplitude que cause desconforto no ombro."),
-    ExercicioAnatomia("Crucifixo inclinado com cabos", "Tórax", "Peitoral", "Mantenha o corpo estável e conduza os braços em arco controlado.", "Não deixe a carga determinar uma amplitude desconfortável."),
-    ExercicioAnatomia("Puxada frontal", "Costas", "Latíssimo do dorso e musculatura das costas", "Puxe conduzindo o movimento com os cotovelos e controle o retorno.", "Evite balançar o tronco para gerar impulso."),
+    ExercicioAnatomia("Agachamento", "Pernas", "Quadríceps e glúteos", "Fique com os pés firmes, leve o quadril para trás e desça com controle. Suba empurrando o chão e mantendo os joelhos acompanhando os pés.", "Evite perder a postura ou usar carga incompatível com a técnica."),
+    ExercicioAnatomia("Leg press", "Pernas", "Quadríceps e glúteos", "Ajuste o banco, apoie os pés na plataforma e empurre com controle, retornando sem perder a posição do quadril.", "Não deixe a lombar perder o apoio nem force uma amplitude sem controle."),
+    ExercicioAnatomia("Cadeira extensora", "Pernas", "Quadríceps", "Estenda os joelhos de forma controlada e retorne lentamente à posição inicial.", "Evite movimentos bruscos e carga excessiva."),
+    ExercicioAnatomia("Mesa flexora", "Pernas", "Posteriores da coxa", "Flexione os joelhos controlando a subida e a descida, mantendo o corpo estável.", "Evite deixar a carga retornar de forma abrupta."),
+    ExercicioAnatomia("Panturrilha em pé", "Pernas", "Panturrilhas", "Fique estável, eleve os calcanhares com controle e retorne lentamente à posição inicial.", "Use apoio quando necessário e evite movimentos rápidos."),
+    ExercicioAnatomia("Supino reto", "Peito", "Peitoral, tríceps e deltóide anterior", "Mantenha os pés firmes, estabilize as escápulas, desça a carga com controle e empurre mantendo a postura.", "Evite quicar a carga ou perder a posição dos ombros."),
+    ExercicioAnatomia("Puxada frontal", "Costas", "Latíssimo do dorso e musculatura das costas", "Conduza a barra com os cotovelos, mantenha o tronco estável e controle o retorno.", "Evite balançar o tronco para gerar impulso."),
     ExercicioAnatomia("Remada curvada", "Costas", "Dorsais, trapézio e musculatura posterior", "Mantenha a coluna estável, incline o tronco de forma controlada e puxe a carga em direção ao corpo.", "Reduza a carga se a posição da coluna se perder."),
-    ExercicioAnatomia("Remada baixa", "Costas", "Dorsais e região média das costas", "Puxe mantendo o tronco estável e retorne lentamente.", "Não transforme o exercício em movimento de balanço."),
-    ExercicioAnatomia("Rosca direta", "Braços", "Bíceps", "Mantenha os cotovelos próximos ao corpo e faça a flexão do cotovelo sem impulso.", "Evite inclinar o tronco para levantar a carga."),
-    ExercicioAnatomia("Rosca martelo", "Braços", "Bíceps e musculatura do antebraço", "Use pegada neutra e mantenha o cotovelo estável durante o movimento.", "Evite acelerar a descida."),
-    ExercicioAnatomia("Tríceps na polia", "Braços", "Tríceps", "Mantenha os cotovelos estáveis e faça a extensão de forma controlada.", "Evite abrir os cotovelos ou usar o tronco para empurrar."),
-    ExercicioAnatomia("Tríceps francês", "Braços", "Tríceps", "Controle a flexão e a extensão dos cotovelos mantendo o braço estável.", "Escolha uma carga que permita controlar todo o movimento."),
-    ExercicioAnatomia("Agachamento", "Pernas", "Quadríceps, glúteos e musculatura posterior", "Mantenha os pés firmes, coluna estável e joelhos acompanhando a direção dos pés.", "Evite perder a postura ao aumentar a carga."),
-    ExercicioAnatomia("Leg press", "Pernas", "Quadríceps e glúteos", "Empurre a plataforma com controle e mantenha a posição do quadril durante o movimento.", "Não permita que a carga force uma amplitude sem controle."),
-    ExercicioAnatomia("Cadeira extensora", "Pernas", "Quadríceps", "Estenda os joelhos de forma controlada e retorne lentamente.", "Evite movimentos bruscos e cargas incompatíveis."),
-    ExercicioAnatomia("Mesa flexora", "Pernas", "Posteriores da coxa", "Flexione os joelhos controlando tanto a subida quanto a descida.", "Evite deixar a carga retornar de forma abrupta."),
-    ExercicioAnatomia("Elevação pélvica", "Pernas", "Glúteos e cadeia posterior", "Eleve o quadril com controle mantendo o tronco estável.", "Evite hiperestender a lombar no topo."),
-    ExercicioAnatomia("Abdominal curto", "Abdominais", "Músculos abdominais", "Faça a contração do tronco de forma curta e controlada, sem puxar a cabeça.", "Evite usar impulso."),
-    ExercicioAnatomia("Prancha", "Abdominais", "Abdômen e estabilizadores do tronco", "Mantenha cabeça, tronco e quadril alinhados e contraia abdômen e glúteos.", "Não deixe o quadril cair e não prenda a respiração.")
+    ExercicioAnatomia("Desenvolvimento", "Ombros", "Deltóides e estabilizadores dos ombros", "Com o tronco firme, empurre os pesos acima da cabeça e retorne com controle.", "Evite compensar com a lombar ou usar carga excessiva."),
+    ExercicioAnatomia("Elevação lateral", "Ombros", "Deltóide lateral", "Eleve os braços para os lados com controle e retorne lentamente.", "Evite balanço do tronco e amplitude desconfortável."),
+    ExercicioAnatomia("Rosca direta", "Braços", "Bíceps", "Mantenha os cotovelos próximos ao corpo e flexione os braços sem balançar o tronco.", "Evite usar as costas para levantar a carga."),
+    ExercicioAnatomia("Tríceps na polia", "Braços", "Tríceps", "Mantenha os cotovelos estáveis e estenda os antebraços de forma controlada.", "Evite abrir os cotovelos ou usar o tronco para empurrar.")
 )
 
 private val capitulos = listOf("Todos", "Ombros", "Tórax", "Costas", "Braços", "Pernas", "Abdominais")
