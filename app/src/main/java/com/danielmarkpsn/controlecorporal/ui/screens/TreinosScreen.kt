@@ -318,7 +318,7 @@ private fun EditorTreino(
                 }
             }
             item {
-                Button(onClick = onStart, enabled = ex.isNotEmpty(), Modifier.fillMaxWidth()) { Text("▶ INICIAR TREINO") }
+                Button(onClick = onStart, enabled = ex.isNotEmpty(), modifier = Modifier.fillMaxWidth()) { Text("▶ INICIAR TREINO") }
             }
             items(ex.indices.toList()) { i ->
                 val e = ex[i]
@@ -471,7 +471,7 @@ private fun ExecucaoTreino(treino: Treino, onBack: () -> Unit, onFinish: (Treino
                                 }
                             },
                             enabled = feitasEx < e.series,
-                            Modifier.fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth()
                         ) { Text(if (feitasEx < e.series) "Registrar série ${feitasEx + 1}" else "Exercício concluído") }
                         TextButton(onClick = { descanso = 90 }, Modifier.fillMaxWidth()) { Text("⏱ Descanso 90 segundos") }
                     }
