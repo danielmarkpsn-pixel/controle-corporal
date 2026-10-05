@@ -1,11 +1,16 @@
 package com.danielmarkpsn.controlecorporal.ui.screens
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -88,6 +93,7 @@ fun TreinosScreen(onVoltar: () -> Unit) {
     var aberto by remember { mutableStateOf<Treino?>(null) }
     var executando by remember { mutableStateOf<Treino?>(null) }
     var novo by remember { mutableStateOf(false) }
+    var prontos by remember { mutableStateOf(false) }
 
     if (executando != null) {
         ExecucaoTreino(executando!!, { executando = null }) {
@@ -139,6 +145,16 @@ fun TreinosScreen(onVoltar: () -> Unit) {
         }
     }
 
+    if (prontos) TreinosProntosDialog(
+        existentes = treinos,
+        onClose = { prontos = false },
+        onAdd = { escolhidos ->
+            treinos = treinos + escolhidos
+            storage.salvar(treinos)
+            prontos = false
+        }
+    )
+
     if (novo) NovoTreinoDialog(
         onClose = { novo = false },
         onCreate = { nome, objetivo ->
@@ -167,6 +183,13 @@ private fun ListaTreinos(
                     Text("🏋️ Programação de treino", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
                     Text("Ficha, execução por séries, descanso, técnica, divisão semanal e histórico.")
                 }
+            }
+        }
+        item {
+            Button(onClick = { prontos = true }, modifier = Modifier.fillMaxWidth()) {
+                Icon(Icons.Default.LibraryAdd, contentDescription = null)
+                Spacer(Modifier.width(8.dp))
+                Text("Usar um treino pronto")
             }
         }
         if (treinos.isEmpty()) item {
@@ -324,6 +347,8 @@ private fun EditorTreino(
                 val e = ex[i]
                 Card {
                     Column(Modifier.padding(14.dp)) {
+                        ExercicioVisual(e.nome, e.musculo, Modifier.fillMaxWidth())
+                        Spacer(Modifier.height(10.dp))
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                             Column(Modifier.weight(1f)) {
                                 Text(e.nome, fontWeight = FontWeight.Bold)
@@ -391,6 +416,7 @@ private fun ExerciseInfoDialog(e: TreinoExercicio, onClose: () -> Unit) {
         title = { Text(e.nome) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                ExercicioVisual(e.nome, e.musculo, Modifier.fillMaxWidth())
                 Text("Músculo: ${e.musculo}", fontWeight = FontWeight.Bold)
                 Text("Como executar", fontWeight = FontWeight.Bold)
                 Text(if (e.instrucoes.isNotBlank()) e.instrucoes else f.como)
@@ -451,6 +477,8 @@ private fun ExecucaoTreino(treino: Treino, onBack: () -> Unit, onFinish: (Treino
                 val feitasEx = feitas[i] ?: 0
                 Card {
                     Column(Modifier.padding(14.dp)) {
+                        ExercicioVisual(e.nome, e.musculo, Modifier.fillMaxWidth())
+                        Spacer(Modifier.height(10.dp))
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                             Column(Modifier.weight(1f)) {
                                 Text(e.nome, fontWeight = FontWeight.Bold)
@@ -492,6 +520,86 @@ private fun ExecucaoTreino(treino: Treino, onBack: () -> Unit, onFinish: (Treino
         }
     }
     if (info != null) ExerciseInfoDialog(info!!) { info = null }
+}
+
+@Composable
+private fun ExercicioVisual(nome: String, musculo: String, modifier: Modifier = Modifier) {
+    val primary = MaterialTheme.colorScheme.primary
+    val secondary = MaterialTheme.colorScheme.secondary
+    Surface(
+        modifier = modifier.height(150.dp),
+        shape = RoundedCornerShape(18.dp),
+        color = MaterialTheme.colorScheme.surfaceVariant
+    ) {
+        Box(Modifier.fillMaxSize()) {
+            Canvas(Modifier.fillMaxSize()) {
+                val cx = size.width * 0.5f
+                val top = size.height * 0.18f
+                drawCircle(primary, radius = size.minDimension * 0.075f, center = androidx.compose.ui.geometry.Offset(cx, top))
+                drawLine(primary, androidx.compose.ui.geometry.Offset(cx, top + 18f), androidx.compose.ui.geometry.Offset(cx, size.height * 0.64f), strokeWidth = 10f)
+                drawLine(primary, androidx.compose.ui.geometry.Offset(cx, size.height * 0.34f), androidx.compose.ui.geometry.Offset(size.width * 0.35f, size.height * 0.49f), strokeWidth = 8f)
+                drawLine(primary, androidx.compose.ui.geometry.Offset(cx, size.height * 0.34f), androidx.compose.ui.geometry.Offset(size.width * 0.65f, size.height * 0.49f), strokeWidth = 8f)
+                drawLine(primary, androidx.compose.ui.geometry.Offset(cx, size.height * 0.64f), androidx.compose.ui.geometry.Offset(size.width * 0.40f, size.height * 0.88f), strokeWidth = 9f)
+                drawLine(primary, androidx.compose.ui.geometry.Offset(cx, size.height * 0.64f), androidx.compose.ui.geometry.Offset(size.width * 0.60f, size.height * 0.88f), strokeWidth = 9f)
+                if (nome.lowercase().contains("supino") || nome.lowercase().contains("crucifixo")) {
+                    drawLine(secondary, androidx.compose.ui.geometry.Offset(size.width * 0.20f, size.height * 0.56f), androidx.compose.ui.geometry.Offset(size.width * 0.80f, size.height * 0.56f), strokeWidth = 12f)
+                } else if (nome.lowercase().contains("agachamento") || nome.lowercase().contains("leg press")) {
+                    drawLine(secondary, androidx.compose.ui.geometry.Offset(size.width * 0.25f, size.height * 0.25f), androidx.compose.ui.geometry.Offset(size.width * 0.75f, size.height * 0.25f), strokeWidth = 9f)
+                } else if (nome.lowercase().contains("remada") || nome.lowercase().contains("puxada")) {
+                    drawLine(secondary, androidx.compose.ui.geometry.Offset(size.width * 0.18f, size.height * 0.72f), androidx.compose.ui.geometry.Offset(size.width * 0.82f, size.height * 0.72f), strokeWidth = 7f)
+                } else {
+                    drawCircle(secondary, radius = size.minDimension * 0.22f, center = androidx.compose.ui.geometry.Offset(cx, size.height * 0.45f), style = Stroke(width = 3f))
+                }
+            }
+            Column(
+                Modifier.align(Alignment.BottomStart).padding(10.dp)
+            ) {
+                Text(nome, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleSmall)
+                Text(musculo, style = MaterialTheme.typography.labelSmall)
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun TreinosProntosDialog(
+    existentes: List<Treino>,
+    onClose: () -> Unit,
+    onAdd: (List<Treino>) -> Unit
+) {
+    var selecionado by remember { mutableStateOf<Treino?>(null) }
+    AlertDialog(
+        onDismissRequest = onClose,
+        title = { Text("Treinos pré-estabelecidos") },
+        text = {
+            LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                item { Text("Escolha uma divisão comum. O treino será adicionado à sua lista e poderá ser editado.", style = MaterialTheme.typography.bodyMedium) }
+                items(TreinoPresets.todos) { t ->
+                    val existe = existentes.any { it.nome == t.nome }
+                    Card(
+                        onClick = { if (!existe) selecionado = t },
+                        colors = CardDefaults.cardColors(
+                            containerColor = if (selecionado?.nome == t.nome) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant
+                        )
+                    ) {
+                        Row(Modifier.padding(12.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                            Icon(Icons.Default.FitnessCenter, null)
+                            Column(Modifier.weight(1f)) {
+                                Text(t.nome, fontWeight = FontWeight.Bold)
+                                Text("${t.objetivo} • ${t.exercicios.size} exercícios • ${t.dias.joinToString("/")}")
+                            }
+                            if (existe) Text("Já adicionado", style = MaterialTheme.typography.labelSmall)
+                        }
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            Button(onClick = { selecionado?.let { onAdd(listOf(it)) } }, enabled = selecionado != null) { Text("Adicionar") }
+        },
+        dismissButton = { TextButton(onClick = onClose) { Text("Cancelar") } }
+    )
 }
 
 private fun formatarData(timestamp: Long): String =
