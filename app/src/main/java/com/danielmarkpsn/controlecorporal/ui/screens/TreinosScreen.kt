@@ -359,8 +359,8 @@ private fun AddExerciseDialog(onClose: () -> Unit, onAdd: (TreinoExercicio) -> U
                 Text("Sugestões: ${biblioteca.take(8).joinToString(", ")}", style = MaterialTheme.typography.bodySmall)
                 OutlinedTextField(musculo, { musculo = it }, label = { Text("Músculo") }, singleLine = true)
                 Row(horizontalArrangement = Arrangement.spacedBy(7.dp)) {
-                    OutlinedTextField(series, { series = it.filter(Char::isDigit) }, label = { Text("Séries") }, Modifier.weight(1f), singleLine = true)
-                    OutlinedTextField(reps, { reps = it.filter(Char::isDigit) }, label = { Text("Reps") }, Modifier.weight(1f), singleLine = true)
+                    OutlinedTextField(series, { series = it.filter(Char::isDigit) }, label = { Text("Séries") }, modifier = Modifier.weight(1f), singleLine = true)
+                    OutlinedTextField(reps, { reps = it.filter(Char::isDigit) }, label = { Text("Reps") }, modifier = Modifier.weight(1f), singleLine = true)
                 }
                 OutlinedTextField(carga, { carga = it.filter { c -> c.isDigit() || c == '.' || c == ',' } }, label = { Text("Carga kg") }, singleLine = true)
             }
@@ -459,7 +459,7 @@ private fun ExecucaoTreino(treino: Treino, onBack: () -> Unit, onFinish: (Treino
                             IconButton(onClick = { info = e }) { Icon(Icons.Default.Info, "Técnica") }
                         }
                         LinearProgressIndicator(
-                            progress = { if (e.series == 0) 0f else (feitasEx.toFloat() / e.series).coerceIn(0f, 1f) },
+                            progress = if (e.series == 0) 0f else (feitasEx.toFloat() / e.series).coerceIn(0f, 1f),
                             Modifier.fillMaxWidth()
                         )
                         Spacer(Modifier.height(8.dp))
