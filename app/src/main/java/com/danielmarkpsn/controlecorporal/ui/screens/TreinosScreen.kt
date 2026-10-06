@@ -1,6 +1,6 @@
 package com.danielmarkpsn.controlecorporal.ui.screens
 
-import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.lazy.LazyColumn
@@ -11,11 +11,14 @@ import androidx.compose.material3.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.danielmarkpsn.controlecorporal.R
 import com.danielmarkpsn.controlecorporal.data.*
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
@@ -525,95 +528,32 @@ private fun ExecucaoTreino(treino: Treino, onBack: () -> Unit, onFinish: (Treino
 @Composable
 fun ExercicioVisual(nome: String, musculo: String, modifier: Modifier = Modifier) {
     val n = nome.lowercase()
-    val base = MaterialTheme.colorScheme.onSurface
-    val accent = MaterialTheme.colorScheme.primary
+    val imagem = when {
+        "supino" in n -> R.drawable.img_supino_reto
+        "crucifixo" in n -> R.drawable.img_crucifixo
+        "agachamento" in n -> R.drawable.img_agachamento
+        "leg press" in n -> R.drawable.img_leg_press
+        "extensora" in n -> R.drawable.img_cadeira_extensora
+        "flexora" in n -> R.drawable.img_mesa_flexora
+        "puxada" in n -> R.drawable.img_puxada
+        "remada" in n -> R.drawable.img_remada
+        "desenvolvimento" in n -> R.drawable.img_desenvolvimento
+        "elevação lateral" in n -> R.drawable.img_elevacao_lateral
+        "rosca" in n -> R.drawable.img_rosca
+        "tríceps" in n -> R.drawable.img_triceps
+        "prancha" in n -> R.drawable.img_prancha
+        "abdominal" in n -> R.drawable.img_abdominal
+        else -> R.drawable.img_agachamento
+    }
+
     Card(modifier = modifier) {
         Column {
-            Canvas(modifier = Modifier.fillMaxWidth().height(150.dp)) {
-                val w = size.width
-                val cx = w / 2f
-                drawCircle(base, 18f, androidx.compose.ui.geometry.Offset(cx, 32f))
-                drawLine(base, androidx.compose.ui.geometry.Offset(cx, 50f), androidx.compose.ui.geometry.Offset(cx, 105f), 8f)
-                drawLine(base, androidx.compose.ui.geometry.Offset(cx, 105f), androidx.compose.ui.geometry.Offset(cx - 25f, 135f), 8f)
-                drawLine(base, androidx.compose.ui.geometry.Offset(cx, 105f), androidx.compose.ui.geometry.Offset(cx + 25f, 135f), 8f)
-                when {
-                    "supino" in n -> {
-                        drawLine(base, androidx.compose.ui.geometry.Offset(cx - 75f, 92f), androidx.compose.ui.geometry.Offset(cx + 75f, 92f), 7f)
-                        drawLine(accent, androidx.compose.ui.geometry.Offset(cx - 42f, 72f), androidx.compose.ui.geometry.Offset(cx - 72f, 52f), 7f)
-                        drawLine(accent, androidx.compose.ui.geometry.Offset(cx + 42f, 72f), androidx.compose.ui.geometry.Offset(cx + 72f, 52f), 7f)
-                        drawLine(base, androidx.compose.ui.geometry.Offset(cx - 92f, 48f), androidx.compose.ui.geometry.Offset(cx + 92f, 48f), 6f)
-                    }
-                    "crucifixo" in n -> {
-                        drawLine(base, androidx.compose.ui.geometry.Offset(cx - 70f, 92f), androidx.compose.ui.geometry.Offset(cx + 70f, 92f), 7f)
-                        drawLine(accent, androidx.compose.ui.geometry.Offset(cx - 8f, 70f), androidx.compose.ui.geometry.Offset(cx - 72f, 48f), 7f)
-                        drawLine(accent, androidx.compose.ui.geometry.Offset(cx + 8f, 70f), androidx.compose.ui.geometry.Offset(cx + 72f, 48f), 7f)
-                    }
-                    "agachamento" in n -> {
-                        drawLine(accent, androidx.compose.ui.geometry.Offset(cx - 52f, 58f), androidx.compose.ui.geometry.Offset(cx + 52f, 58f), 7f)
-                        drawLine(base, androidx.compose.ui.geometry.Offset(cx - 35f, 48f), androidx.compose.ui.geometry.Offset(cx - 18f, 72f), 7f)
-                        drawLine(base, androidx.compose.ui.geometry.Offset(cx + 35f, 48f), androidx.compose.ui.geometry.Offset(cx + 18f, 72f), 7f)
-                        drawLine(base, androidx.compose.ui.geometry.Offset(cx - 18f, 72f), androidx.compose.ui.geometry.Offset(cx - 52f, 112f), 8f)
-                        drawLine(base, androidx.compose.ui.geometry.Offset(cx + 18f, 72f), androidx.compose.ui.geometry.Offset(cx + 52f, 112f), 8f)
-                    }
-                    "leg press" in n -> {
-                        drawLine(base, androidx.compose.ui.geometry.Offset(cx - 65f, 108f), androidx.compose.ui.geometry.Offset(cx + 35f, 108f), 8f)
-                        drawLine(accent, androidx.compose.ui.geometry.Offset(cx + 35f, 108f), androidx.compose.ui.geometry.Offset(cx + 82f, 65f), 7f)
-                        drawLine(base, androidx.compose.ui.geometry.Offset(cx - 15f, 75f), androidx.compose.ui.geometry.Offset(cx + 30f, 100f), 7f)
-                        drawLine(base, androidx.compose.ui.geometry.Offset(cx + 30f, 100f), androidx.compose.ui.geometry.Offset(cx + 78f, 120f), 7f)
-                    }
-                    "extensora" in n -> {
-                        drawLine(base, androidx.compose.ui.geometry.Offset(cx - 55f, 105f), androidx.compose.ui.geometry.Offset(cx + 45f, 105f), 8f)
-                        drawLine(accent, androidx.compose.ui.geometry.Offset(cx + 15f, 90f), androidx.compose.ui.geometry.Offset(cx + 72f, 90f), 7f)
-                    }
-                    "flexora" in n -> {
-                        drawLine(base, androidx.compose.ui.geometry.Offset(cx - 55f, 105f), androidx.compose.ui.geometry.Offset(cx + 45f, 105f), 8f)
-                        drawLine(accent, androidx.compose.ui.geometry.Offset(cx + 25f, 90f), androidx.compose.ui.geometry.Offset(cx + 58f, 62f), 7f)
-                    }
-                    "puxada" in n -> {
-                        drawLine(base, androidx.compose.ui.geometry.Offset(cx - 65f, 42f), androidx.compose.ui.geometry.Offset(cx + 65f, 42f), 7f)
-                        drawLine(accent, androidx.compose.ui.geometry.Offset(cx - 35f, 42f), androidx.compose.ui.geometry.Offset(cx - 20f, 75f), 7f)
-                        drawLine(accent, androidx.compose.ui.geometry.Offset(cx + 35f, 42f), androidx.compose.ui.geometry.Offset(cx + 20f, 75f), 7f)
-                    }
-                    "remada" in n -> {
-                        drawLine(accent, androidx.compose.ui.geometry.Offset(cx, 75f), androidx.compose.ui.geometry.Offset(cx - 65f, 92f), 7f)
-                        drawLine(base, androidx.compose.ui.geometry.Offset(cx - 65f, 92f), androidx.compose.ui.geometry.Offset(cx - 95f, 112f), 6f)
-                        drawLine(accent, androidx.compose.ui.geometry.Offset(cx, 75f), androidx.compose.ui.geometry.Offset(cx + 65f, 92f), 7f)
-                    }
-                    "desenvolvimento" in n -> {
-                        drawLine(accent, androidx.compose.ui.geometry.Offset(cx - 48f, 52f), androidx.compose.ui.geometry.Offset(cx - 48f, 18f), 7f)
-                        drawLine(accent, androidx.compose.ui.geometry.Offset(cx + 48f, 52f), androidx.compose.ui.geometry.Offset(cx + 48f, 18f), 7f)
-                        drawCircle(accent, 7f, androidx.compose.ui.geometry.Offset(cx - 48f, 12f))
-                        drawCircle(accent, 7f, androidx.compose.ui.geometry.Offset(cx + 48f, 12f))
-                    }
-                    "elevação lateral" in n -> {
-                        drawLine(accent, androidx.compose.ui.geometry.Offset(cx, 62f), androidx.compose.ui.geometry.Offset(cx - 70f, 48f), 7f)
-                        drawLine(accent, androidx.compose.ui.geometry.Offset(cx, 62f), androidx.compose.ui.geometry.Offset(cx + 70f, 48f), 7f)
-                    }
-                    "rosca" in n -> {
-                        drawLine(accent, androidx.compose.ui.geometry.Offset(cx - 22f, 70f), androidx.compose.ui.geometry.Offset(cx - 45f, 100f), 7f)
-                        drawLine(accent, androidx.compose.ui.geometry.Offset(cx + 22f, 70f), androidx.compose.ui.geometry.Offset(cx + 45f, 100f), 7f)
-                        drawCircle(accent, 6f, androidx.compose.ui.geometry.Offset(cx - 48f, 105f))
-                        drawCircle(accent, 6f, androidx.compose.ui.geometry.Offset(cx + 48f, 105f))
-                    }
-                    "tríceps" in n -> {
-                        drawLine(base, androidx.compose.ui.geometry.Offset(cx - 65f, 42f), androidx.compose.ui.geometry.Offset(cx - 65f, 115f), 6f)
-                        drawLine(accent, androidx.compose.ui.geometry.Offset(cx - 25f, 62f), androidx.compose.ui.geometry.Offset(cx - 65f, 45f), 7f)
-                    }
-                    "prancha" in n -> {
-                        drawLine(accent, androidx.compose.ui.geometry.Offset(cx - 80f, 82f), androidx.compose.ui.geometry.Offset(cx + 70f, 82f), 9f)
-                        drawLine(base, androidx.compose.ui.geometry.Offset(cx - 80f, 82f), androidx.compose.ui.geometry.Offset(cx - 98f, 110f), 7f)
-                        drawLine(base, androidx.compose.ui.geometry.Offset(cx + 70f, 82f), androidx.compose.ui.geometry.Offset(cx + 92f, 110f), 7f)
-                    }
-                    "abdominal" in n -> {
-                        drawLine(base, androidx.compose.ui.geometry.Offset(cx - 55f, 105f), androidx.compose.ui.geometry.Offset(cx + 45f, 105f), 8f)
-                        drawLine(accent, androidx.compose.ui.geometry.Offset(cx - 25f, 100f), androidx.compose.ui.geometry.Offset(cx + 5f, 70f), 8f)
-                    }
-                    else -> {
-                        drawLine(accent, androidx.compose.ui.geometry.Offset(cx - 45f, 65f), androidx.compose.ui.geometry.Offset(cx - 75f, 92f), 7f)
-                        drawLine(accent, androidx.compose.ui.geometry.Offset(cx + 45f, 65f), androidx.compose.ui.geometry.Offset(cx + 75f, 92f), 7f)
-                    }
-                }
-            }
+            Image(
+                painter = painterResource(id = imagem),
+                contentDescription = "Ilustração de $nome",
+                modifier = Modifier.fillMaxWidth().height(150.dp),
+                contentScale = ContentScale.Fit
+            )
             Column(Modifier.padding(12.dp)) {
                 Text(nome, fontWeight = FontWeight.Bold)
                 Text(musculo, style = MaterialTheme.typography.labelMedium)
@@ -621,6 +561,7 @@ fun ExercicioVisual(nome: String, musculo: String, modifier: Modifier = Modifier
         }
     }
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TreinosProntosDialog(
