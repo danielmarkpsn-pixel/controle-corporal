@@ -525,13 +525,13 @@ private fun ExecucaoTreino(treino: Treino, onBack: () -> Unit, onFinish: (Treino
 @Composable
 fun ExercicioVisual(nome: String, musculo: String, modifier: Modifier = Modifier) {
     val n = nome.lowercase()
+    val base = MaterialTheme.colorScheme.onSurface
+    val accent = MaterialTheme.colorScheme.primary
     Card(modifier = modifier) {
         Column {
             Canvas(modifier = Modifier.fillMaxWidth().height(150.dp)) {
                 val w = size.width
                 val cx = w / 2f
-                val base = MaterialTheme.colorScheme.onSurface
-                val accent = MaterialTheme.colorScheme.primary
                 drawCircle(base, 18f, androidx.compose.ui.geometry.Offset(cx, 32f))
                 drawLine(base, androidx.compose.ui.geometry.Offset(cx, 50f), androidx.compose.ui.geometry.Offset(cx, 105f), 8f)
                 drawLine(base, androidx.compose.ui.geometry.Offset(cx, 105f), androidx.compose.ui.geometry.Offset(cx - 25f, 135f), 8f)
