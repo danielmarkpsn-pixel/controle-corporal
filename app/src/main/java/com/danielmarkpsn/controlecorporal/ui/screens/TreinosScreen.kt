@@ -175,48 +175,153 @@ private fun ListaTreinos(
     treinos: List<Treino>, p: PaddingValues, onNovo: () -> Unit,
     onOpen: (Treino) -> Unit, onStart: (Treino) -> Unit, onProntos: () -> Unit
 ) {
+    var divisao by remember { mutableStateOf("Todos") }
+    val filtros = listOf("Todos", "ABC", "ABCD", "PPL", "Full Body")
+    val filtrados = treinos.filter { treino ->
+        when (divisao) {
+            "ABC" -> treino.nome.contains("ABC", ignoreCase = true) && !treino.nome.contains("ABCD", ignoreCase = true)
+            "ABCD" -> treino.nome.contains("ABCD", ignoreCase = true)
+            "PPL" -> treino.nome.contains("PPL", ignoreCase = true)
+            "Full Body" -> treino.nome.contains("Full Body", ignoreCase = true)
+            else -> true
+        }
+    }
+
     LazyColumn(
         Modifier.padding(p).fillMaxSize(),
-        contentPadding = PaddingValues(16.dp),
+        contentPadding = PaddingValues(16.dp, 12.dp, 16.dp, 24.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         item {
-            Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)) {
-                Column(Modifier.padding(18.dp)) {
-                    Text("🏋️ Programação de treino", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
-                    Text("Ficha, execução por séries, descanso, técnica, divisão semanal e histórico.")
+            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                Column(Modifier.weight(1f)) {
+                    Text("Meus treinos", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.ExtraBold)
+                    Text("Divisões, exercícios, registros e evolução.")
+                }
+                FilledIconButton(onClick = onNovo) {
+                    Icon(Icons.Default.Add, "Novo treino")
                 }
             }
         }
         item {
-            Button(onClick = onProntos, modifier = Modifier.fillMaxWidth()) {
-                Icon(Icons.Default.LibraryAdd, contentDescription = null)
-                Spacer(Modifier.width(8.dp))
-                Text("Usar um treino pronto")
+            Card(
+                Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(22.dp),
+                colors = CardDefaults.cardColors(MaterialTheme.colorScheme.primaryContainer)
+            ) {
+                Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(Icons.Default.FitnessCenter, null, Modifier.size(30.dp))
+                        Spacer(Modifier.width(10.dp))
+                        Column {
+                            Text("Central de treinamento", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                            Text("${treinos.size} fichas • ${treinos.sumOf { it.exercicios.size }} exercícios")
+                        }
+                    }
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Button(onClick = onProntos, Modifier.weight(1f)) {
+                            Icon(Icons.Default.LibraryAdd, null); Spacer(Modifier.width(5.dp)); Text("Treinos prontos")
+                        }
+                        OutlinedButton(onClick = onNovo, Modifier.weight(1f)) {
+                            Icon(Icons.Default.Add, null); Spacer(Modifier.width(5.dp)); Text("Novo treino")
+                        }
+                    }
+                }
             }
         }
-        if (treinos.isEmpty()) item {
-            OutlinedButton(onClick = onNovo, modifier = Modifier.fillMaxWidth()) { Text("Criar meu primeiro treino") }
+        item {
+            Text("Divisões de treino", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
         }
-        items(treinos) { t ->
-            Card(Modifier.fillMaxWidth()) {
-                Column(Modifier.padding(16.dp)) {
-                    Text(t.nome, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-                    Text("${t.objetivo} • ${t.exercicios.size} exercícios")
-                    if (t.dias.isNotEmpty()) Text("📅 ${t.dias.joinToString(" • ")}")
-                    Spacer(Modifier.height(8.dp))
-                    Text(t.exercicios.take(3).joinToString(" • ") { it.nome }.ifBlank { "Nenhum exercício" })
-                    Spacer(Modifier.height(10.dp))
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Button(onClick = { onStart(t) }, enabled = t.exercicios.isNotEmpty()) { Text("▶ Iniciar") }
-                        OutlinedButton(onClick = { onOpen(t) }) { Text("Editar") }
+        item {
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(7.dp)) {
+                filtros.forEach { filtro ->
+                    FilterChip(
+                        selected = divisao == filtro,
+                        onClick = { divisao = filtro },
+                        label = { Text(filtro) }
+                    )
+                }
+            }
+        }
+        if (filtrados.isEmpty()) {
+            item {
+                Card(Modifier.fillMaxWidth()) {
+                    Column(Modifier.padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                        Icon(Icons.Default.FitnessCenter, null, Modifier.size(44.dp))
+                        Spacer(Modifier.height(8.dp))
+                        Text("Nenhum treino nesta divisão", fontWeight = FontWeight.Bold)
+                        Text("Adicione um treino pronto ou crie sua própria ficha.")
+                        Spacer(Modifier.height(12.dp))
+                        Button(onClick = onProntos) { Text("Ver treinos prontos") }
+                    }
+                }
+            }
+        }
+        items(filtrados) { t ->
+            Card(Modifier.fillMaxWidth(), shape = RoundedCornerShape(20.dp)) {
+                Column {
+                    if (t.exercicios.isNotEmpty()) {
+                        ExercicioVisual(t.exercicios.first().nome, t.exercicios.first().musculo, Modifier.fillMaxWidth())
+                    } else {
+                        Surface(Modifier.fillMaxWidth().height(110.dp), color = MaterialTheme.colorScheme.surfaceVariant) {
+                            Box(contentAlignment = Alignment.Center) {
+                                Icon(Icons.Default.FitnessCenter, null, Modifier.size(42.dp))
+                            }
+                        }
+                    }
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                            Column(Modifier.weight(1f)) {
+                                Text(t.nome, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.ExtraBold)
+                                Text(t.objetivo, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.SemiBold)
+                            }
+                            AssistChip(
+                                onClick = { onOpen(t) },
+                                label = { Text("${t.exercicios.size} exercícios") },
+                                leadingIcon = { Icon(Icons.Default.List, null) }
+                            )
+                        }
+                        if (t.dias.isNotEmpty()) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(Icons.Default.DateRange, null, Modifier.size(18.dp))
+                                Spacer(Modifier.width(5.dp))
+                                Text(t.dias.joinToString(" • "), style = MaterialTheme.typography.bodySmall)
+                            }
+                        }
+                        Text(
+                            t.exercicios.take(4).joinToString(" • ") { it.nome }.ifBlank { "Nenhum exercício cadastrado" }
+                        )
+                        HorizontalDivider()
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Button(
+                                onClick = { onStart(t) },
+                                enabled = t.exercicios.isNotEmpty(),
+                                Modifier.weight(1f),
+                                shape = RoundedCornerShape(14.dp)
+                            ) {
+                                Icon(Icons.Default.PlayArrow, null); Spacer(Modifier.width(5.dp)); Text("Iniciar")
+                            }
+                            OutlinedButton(
+                                onClick = { onOpen(t) },
+                                Modifier.weight(1f),
+                                shape = RoundedCornerShape(14.dp)
+                            ) {
+                                Icon(Icons.Default.Edit, null); Spacer(Modifier.width(5.dp)); Text("Editar")
+                            }
+                        }
+                        OutlinedButton(
+                            onClick = { onOpen(t) },
+                            Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(14.dp)
+                        ) {
+                            Icon(Icons.Default.Assessment, null); Spacer(Modifier.width(6.dp)); Text("Exercícios e registros")
+                        }
                     }
                 }
             }
         }
     }
 }
-
 @Composable
 private fun SemanaTreinos(treinos: List<Treino>, p: PaddingValues, onOpen: (Treino) -> Unit) {
     LazyColumn(
