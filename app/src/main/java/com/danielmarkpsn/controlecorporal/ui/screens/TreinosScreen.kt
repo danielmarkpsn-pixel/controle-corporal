@@ -414,24 +414,156 @@ private fun AddExerciseDialog(onClose: () -> Unit, onAdd: (TreinoExercicio) -> U
 @Composable
 private fun ExerciseInfoDialog(e: TreinoExercicio, onClose: () -> Unit) {
     val f = ficha(e.nome)
+    val n = e.nome.lowercase()
+    val principais = when {
+        "supino" in n -> listOf("Peitoral maior")
+        "puxada" in n || "remada" in n -> listOf(e.musculo.ifBlank { "Costas" })
+        "desenvolvimento" in n || "elevação lateral" in n -> listOf("Deltoides")
+        "tríceps" in n -> listOf("Tríceps")
+        "rosca" in n -> listOf("Bíceps")
+        "agachamento" in n || "leg press" in n -> listOf("Quadríceps", "Glúteos")
+        "extensora" in n -> listOf("Quadríceps")
+        "flexora" in n -> listOf("Posteriores de coxa")
+        "abdominal" in n || "prancha" in n -> listOf("Abdômen")
+        else -> listOf(e.musculo.ifBlank { "Músculo principal" })
+    }
+    val secundarios = when {
+        "supino" in n -> listOf("Tríceps", "Ombros")
+        "puxada" in n || "remada" in n -> listOf("Bíceps", "Ombros")
+        "desenvolvimento" in n -> listOf("Tríceps", "Trapézio")
+        "elevação lateral" in n -> listOf("Trapézio")
+        "tríceps" in n -> listOf("Ombros")
+        "rosca" in n -> listOf("Antebraços")
+        "agachamento" in n || "leg press" in n -> listOf("Posteriores de coxa", "Panturrilhas")
+        else -> listOf("Músculos estabilizadores")
+    }
+    val passos = listOf(
+        f.como,
+        "Execute a fase de retorno de forma lenta e controlada, mantendo a postura.",
+        "Complete a amplitude confortável sem perder o alinhamento do corpo.",
+        "Volte à posição inicial e repita mantendo a mesma técnica."
+    )
+
     AlertDialog(
         onDismissRequest = onClose,
-        title = { Text(e.nome) },
-        text = {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                ExercicioVisual(e.nome, e.musculo, Modifier.fillMaxWidth())
-                Text("Músculo: ${e.musculo}", fontWeight = FontWeight.Bold)
-                Text("Como executar", fontWeight = FontWeight.Bold)
-                Text(if (e.instrucoes.isNotBlank()) e.instrucoes else f.como)
-                Text("Respiração", fontWeight = FontWeight.Bold)
-                Text(if (e.respiracao.isNotBlank()) e.respiracao else f.respirar)
-                Text("Erros comuns", fontWeight = FontWeight.Bold)
-                Text(if (e.erros.isNotBlank()) e.erros else f.erros)
-                Text("${e.series} séries × ${e.repeticoes} repetições")
+        title = {
+            Row(
+                Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(e.nome, fontWeight = FontWeight.Bold)
+                IconButton(onClick = onClose) {
+                    Icon(Icons.Default.BookmarkBorder, contentDescription = "Favoritar")
+                }
             }
         },
-        confirmButton = { Button(onClick = onClose) { Text("Entendi") } }
+        text = {
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                item {
+                    AssistChip(
+                        onClick = {},
+                        label = { Text(e.musculo.ifBlank { "Geral" }) },
+                        leadingIcon = { Icon(Icons.Default.FitnessCenter, null) }
+                    )
+                }
+                item {
+                    Card(
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant
+                        ),
+                        shape = RoundedCornerShape(18.dp)
+                    ) {
+                        Column(Modifier.padding(8.dp)) {
+                            ExercicioVisual(e.nome, e.musculo, Modifier.fillMaxWidth())
+                        }
+                    }
+                }
+                item {
+                    Card {
+                        Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
+                            Text("Músculos envolvidos", fontWeight = FontWeight.Bold)
+                            Text("Principais:", fontWeight = FontWeight.SemiBold)
+                            principais.forEach { Text("• " + it) }
+                            Spacer(Modifier.height(3.dp))
+                            Text("Secundários:", fontWeight = FontWeight.SemiBold)
+                            secundarios.forEach { Text("• " + it) }
+                        }
+                    }
+                }
+                item {
+                    Text("Passo a passo", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                }
+                items(passos) { passo ->
+                    val numero = passos.indexOf(passo) + 1
+                    Row(horizontalArrangement = Arrangement.spacedBy(9.dp)) {
+                        Surface(
+                            shape = androidx.compose.foundation.shape.CircleShape,
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(24.dp)
+                        ) {
+                            Box(contentAlignment = Alignment.Center) {
+                                Text(numero.toString(), color = MaterialTheme.colorScheme.onPrimary, fontWeight = FontWeight.Bold)
+                            }
+                        }
+                        Text(passo, modifier = Modifier.weight(1f))
+                    }
+                }
+                item {
+                    Row(
+                        Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(7.dp)
+                    ) {
+                        InfoTreino("Séries", e.series.toString() + "-" + (e.series + 1), Modifier.weight(1f))
+                        InfoTreino("Repetições", e.repeticoes.toString() + "-" + (e.repeticoes + 5), Modifier.weight(1f))
+                        InfoTreino("Dificuldade", "Média", Modifier.weight(1f))
+                    }
+                }
+                item {
+                    Card(
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer
+                        ),
+                        shape = RoundedCornerShape(16.dp)
+                    ) {
+                        Column(Modifier.padding(13.dp)) {
+                            Text("💡 Dica", fontWeight = FontWeight.Bold)
+                            Text(f.erros.replace("Evite ", "Mantenha o controle e evite "))
+                        }
+                    }
+                }
+                item {
+                    Button(
+                        onClick = onClose,
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(18.dp)
+                    ) {
+                        Icon(Icons.Default.Add, contentDescription = null)
+                        Spacer(Modifier.width(6.dp))
+                        Text("Adicionar ao treino")
+                    }
+                }
+            }
+        },
+        confirmButton = {},
+        dismissButton = {}
     )
+}
+
+@Composable
+private fun InfoTreino(titulo: String, valor: String, modifier: Modifier = Modifier) {
+    Card(modifier) {
+        Column(
+            Modifier.padding(9.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(titulo, style = MaterialTheme.typography.labelSmall)
+            Text(valor, fontWeight = FontWeight.Bold)
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
