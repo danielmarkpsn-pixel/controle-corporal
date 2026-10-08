@@ -1,67 +1,50 @@
 package com.danielmarkpsn.controlecorporal.ui.theme
 
 import android.app.Activity
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
-private val LightColors = lightColorScheme(
-    primary = RosaMedio,
-    onPrimary = FundoClaro,
-    primaryContainer = RosaClaro,
-    onPrimaryContainer = RosaEscuro,
-    secondary = LilasMedio,
-    onSecondary = FundoClaro,
-    secondaryContainer = LilasClaro,
-    onSecondaryContainer = LilasEscuro,
-    background = FundoClaro,
-    onBackground = TextoClaro,
-    surface = SuperficieClara,
-    onSurface = TextoClaro
-)
-
-private val DarkColors = darkColorScheme(
-    primary = RosaClaro,
-    onPrimary = RosaEscuro,
-    primaryContainer = RosaEscuro,
-    onPrimaryContainer = RosaClaro,
+private val AppColors = darkColorScheme(
+    primary = Lilas,
+    onPrimary = Branco,
+    primaryContainer = LilasEscuro,
+    onPrimaryContainer = Branco,
     secondary = LilasClaro,
-    onSecondary = LilasEscuro,
-    secondaryContainer = LilasEscuro,
+    onSecondary = Preto,
+    secondaryContainer = SuperficieElevada,
     onSecondaryContainer = LilasClaro,
-    background = FundoEscuro,
-    onBackground = TextoEscuro,
-    surface = SuperficieEscura,
-    onSurface = TextoEscuro
+    tertiary = Sucesso,
+    onTertiary = Preto,
+    background = Fundo,
+    onBackground = Branco,
+    surface = Superficie,
+    onSurface = Branco,
+    surfaceVariant = SuperficieElevada,
+    onSurfaceVariant = TextoSecundario,
+    outline = Divisor
 )
 
 @Composable
 fun ControleCorporalTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    darkTheme: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = if (darkTheme) DarkColors else LightColors
-
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
-            WindowCompat.getInsetsController(window, view)
-                .isAppearanceLightStatusBars = !darkTheme
+            window.statusBarColor = Fundo.toArgb()
+            window.navigationBarColor = Fundo.toArgb()
+            WindowCompat.getInsetsController(window, view).apply {
+                isAppearanceLightStatusBars = false
+                isAppearanceLightNavigationBars = false
+            }
         }
     }
-
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = AppTypography,
-        content = content
-    )
+    MaterialTheme(colorScheme = AppColors, typography = AppTypography, content = content)
 }

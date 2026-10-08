@@ -4,15 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.BarChart
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.FitnessCenter
-import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.AddAPhoto
-import androidx.compose.material.icons.filled.PictureAsPdf
-import androidx.compose.material.icons.filled.Height
-import androidx.compose.material.icons.filled.Flag
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,6 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.danielmarkpsn.controlecorporal.ui.components.JosyHero
+import com.danielmarkpsn.controlecorporal.ui.theme.Lilas
 import com.danielmarkpsn.controlecorporal.viewmodel.ControleViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -42,234 +36,88 @@ fun HomeScreen(
     val classificacao by viewModel.classificacaoImc.collectAsStateWithLifecycle()
 
     Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             TopAppBar(
-                title = {
-                    Column {
-                        Text("Controle Corporal", fontWeight = FontWeight.Bold)
-                        Text(
-                            "Acompanhe sua evolução",
-                            style = MaterialTheme.typography.labelMedium
-                        )
-                    }
-                },
-                actions = {
-                    IconButton(onClick = onVerMeta) {
-                        Icon(Icons.Default.Edit, contentDescription = "Editar altura e meta")
-                    }
-                }
+                title = { Column {
+                    Text("Controle Corporal", fontWeight = FontWeight.Bold)
+                    Text("Sua jornada de evolução", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }},
+                actions = { IconButton(onClick = onVerMeta) { Icon(Icons.Default.Tune, "Configurar metas") } },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)
             )
-        },
-        floatingActionButton = {
-            FloatingActionButton(onClick = onAdicionarPeso) {
-                Icon(Icons.Default.Add, contentDescription = "Registrar peso")
-            }
         }
     ) { padding ->
-        Column(
-            modifier = Modifier
-                .padding(padding)
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 16.dp, vertical = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(14.dp)
-        ) {
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer
-                )
-            ) {
-                Column(Modifier.padding(20.dp)) {
-                    Text(
-                        "Seu peso atual",
-                        style = MaterialTheme.typography.labelLarge
-                    )
-                    Spacer(Modifier.height(4.dp))
-                    Text(
-                        ultimoPeso?.let { "%.1f kg".format(it.pesoKg) } ?: "Nenhum registro",
-                        style = MaterialTheme.typography.headlineLarge,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        if (ultimoPeso != null) "Última pesagem registrada"
-                        else "Registre seu primeiro peso",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
-            }
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                InfoCard(
-                    modifier = Modifier.weight(1f),
-                    title = "IMC",
-                    value = if (imc > 0f) "%.1f".format(imc) else "—",
-                    subtitle = if (imc > 0f) classificacao else "Cadastre sua altura",
-                    icon = { Icon(Icons.Default.FitnessCenter, contentDescription = null) }
-                )
-                InfoCard(
-                    modifier = Modifier.weight(1f),
-                    title = "Altura",
-                    value = meta?.alturaCm?.takeIf { it > 0f }?.let { "%.0f cm".format(it) } ?: "—",
-                    subtitle = if (meta?.alturaCm?.let { it > 0f } == true) "Altura cadastrada" else "Toque em editar",
-                    icon = { Icon(Icons.Default.Height, contentDescription = null) }
-                )
-            }
-
-            Card(modifier = Modifier.fillMaxWidth()) {
-                Column(Modifier.padding(18.dp)) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Column {
-                            Text("Meta de peso", style = MaterialTheme.typography.labelLarge)
-                            Text(
-                                meta?.pesoAlvoKg?.takeIf { it > 0f }?.let { "%.1f kg".format(it) }
-                                    ?: "Nenhuma meta definida",
-                                style = MaterialTheme.typography.titleLarge,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                        Icon(
-                            Icons.Default.Flag,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                    }
-
-                    val alvo = meta?.pesoAlvoKg ?: 0f
-                    val atual = ultimoPeso?.pesoKg
-                    if (alvo > 0f && atual != null) {
-                        Spacer(Modifier.height(12.dp))
-                        val progresso = (atual / alvo).coerceIn(0f, 1f)
-                        LinearProgressIndicator(
-                            progress = { progresso },
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                        Spacer(Modifier.height(6.dp))
-                        Text(
-                            if (atual <= alvo) "Meta atingida!" else "Faltam %.1f kg".format(atual - alvo),
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                    }
-                }
-            }
-
-            Card(
-                onClick = onVerTreinos,
-                modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
-            ) {
-                Row(Modifier.padding(18.dp), horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-                    Icon(Icons.Default.FitnessCenter, contentDescription = null)
-                    Column(Modifier.weight(1f)) {
-                        Text("🏋️ Treinos", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-                        Text("Exercícios, musculação e programação de treino", style = MaterialTheme.typography.bodyMedium)
-                    }
-                }
-            }
-
-            Card(
-                onClick = onVerAnatomia,
-                modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer)
-            ) {
-                Row(Modifier.padding(18.dp), horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-                    Icon(Icons.Default.FitnessCenter, contentDescription = null)
-                    Column(Modifier.weight(1f)) {
-                        Text("🧠 Anatomia da musculação", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-                        Text("Músculos, grupos e orientações de exercícios", style = MaterialTheme.typography.bodyMedium)
-                    }
-                }
-            }
-
-            Text(
-                "Ações rápidas",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
+        Column(Modifier.padding(padding).fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            JosyHero(
+                title = "Olá! Eu sou a Josy.",
+                message = "Sua parceira de evolução. Registre seus dados, treine com foco e acompanhe cada conquista.",
+                actionLabel = "Começar treino",
+                onAction = onVerTreinos
             )
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                FilledTonalButton(
-                    onClick = onAdicionarMedida,
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Icon(Icons.Default.FitnessCenter, contentDescription = null)
-                    Spacer(Modifier.width(6.dp))
-                    Text("Medidas")
-                }
-                FilledTonalButton(
-                    onClick = onVerGrafico,
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Icon(Icons.Default.BarChart, contentDescription = null)
-                    Spacer(Modifier.width(6.dp))
-                    Text("Evolução")
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
+                MetricCard("PESO", ultimoPeso?.let { "%.1f kg".format(it.pesoKg) } ?: "—", "Atual", Modifier.weight(1f))
+                MetricCard("IMC", if (imc > 0f) "%.1f".format(imc) else "—", if (imc > 0f) classificacao else "Cadastre altura", Modifier.weight(1f))
+                MetricCard("META", meta?.pesoAlvoKg?.takeIf { it > 0f }?.let { "%.1f kg".format(it) } ?: "—", "Objetivo", Modifier.weight(1f))
+            }
+            Text("Centro de controle", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+            Text("Tudo o que você precisa em um só lugar.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            ActionCard("Treinos", "Divisões, exercícios, registros e evolução", Icons.Default.FitnessCenter, onVerTreinos, true)
+            ActionCard("Biblioteca de exercícios", "Técnica, músculos envolvidos e dicas", Icons.Default.MenuBook, onVerAnatomia, false)
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
+                SmallAction("Evolução", Icons.Default.ShowChart, onVerGrafico, Modifier.weight(1f))
+                SmallAction("Histórico", Icons.Default.History, onVerHistorico, Modifier.weight(1f))
+            }
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
+                SmallAction("Medidas", Icons.Default.Straighten, onAdicionarMedida, Modifier.weight(1f))
+                SmallAction("Fotos", Icons.Default.PhotoCamera, onVerFotos, Modifier.weight(1f))
+                SmallAction("PDF", Icons.Default.PictureAsPdf, onVerRelatorio, Modifier.weight(1f))
+            }
+            Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)) {
+                Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
+                    Text("Meta de peso", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                    val alvo = meta?.pesoAlvoKg ?: 0f
+                    val atual = ultimoPeso?.pesoKg ?: 0f
+                    Text(if (alvo > 0f && atual > 0f) {
+                        if (atual <= alvo) "Meta atingida. Excelente trabalho!" else "Faltam %.1f kg para sua meta.".format(atual - alvo)
+                    } else "Defina sua meta para acompanhar seu progresso.")
+                    if (alvo > 0f && atual > 0f) LinearProgressIndicator(progress = { (alvo / atual).coerceIn(0f, 1f) }, modifier = Modifier.fillMaxWidth(), color = Lilas)
                 }
             }
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                OutlinedButton(
-                    onClick = onVerFotos,
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Icon(Icons.Default.AddAPhoto, contentDescription = null)
-                    Spacer(Modifier.width(6.dp))
-                    Text("Fotos")
-                }
-                OutlinedButton(
-                    onClick = onVerRelatorio,
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Icon(Icons.Default.PictureAsPdf, contentDescription = null)
-                    Spacer(Modifier.width(6.dp))
-                    Text("PDF")
-                }
+            OutlinedButton(onClick = onAdicionarPeso, modifier = Modifier.fillMaxWidth()) {
+                Icon(Icons.Default.Add, null); Spacer(Modifier.width(8.dp)); Text("Registrar nova pesagem")
             }
-
-            OutlinedButton(
-                onClick = onVerHistorico,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Icon(Icons.Default.History, contentDescription = null)
-                Spacer(Modifier.width(8.dp))
-                Text("Ver histórico completo")
-            }
-
             Spacer(Modifier.height(72.dp))
         }
     }
 }
 
 @Composable
-private fun InfoCard(
-    modifier: Modifier,
-    title: String,
-    value: String,
-    subtitle: String,
-    icon: @Composable () -> Unit
-) {
-    Card(modifier = modifier) {
-        Column(Modifier.padding(16.dp)) {
-            icon()
-            Spacer(Modifier.height(8.dp))
-            Text(title, style = MaterialTheme.typography.labelLarge)
-            Text(value, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
-            Text(
-                subtitle,
-                style = MaterialTheme.typography.bodySmall,
-                maxLines = 2
-            )
+private fun MetricCard(title: String, value: String, subtitle: String, modifier: Modifier) {
+    Card(modifier = modifier, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)) {
+        Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+            Text(title, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(value, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+            Text(subtitle, style = MaterialTheme.typography.labelSmall, color = Lilas)
         }
     }
+}
+
+@Composable
+private fun ActionCard(title: String, subtitle: String, icon: androidx.compose.ui.graphics.vector.ImageVector, onClick: () -> Unit, featured: Boolean) {
+    Card(onClick = onClick, modifier = Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = if (featured) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant)) {
+        Row(Modifier.padding(18.dp), horizontalArrangement = Arrangement.spacedBy(14.dp)) {
+            Surface(shape = MaterialTheme.shapes.medium, color = Lilas.copy(alpha = .18f), modifier = Modifier.size(48.dp)) { Icon(icon, null, tint = Lilas, modifier = Modifier.padding(12.dp)) }
+            Column(Modifier.weight(1f)) {
+                Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                Text(subtitle, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+            Icon(Icons.Default.ChevronRight, null, tint = Lilas)
+        }
+    }
+}
+
+@Composable
+private fun SmallAction(title: String, icon: androidx.compose.ui.graphics.vector.ImageVector, onClick: () -> Unit, modifier: Modifier) {
+    FilledTonalButton(onClick = onClick, modifier = modifier.height(52.dp)) { Icon(icon, null); Spacer(Modifier.width(5.dp)); Text(title) }
 }

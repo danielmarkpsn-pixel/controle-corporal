@@ -2,19 +2,15 @@ package com.danielmarkpsn.controlecorporal.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// Rosa / lilás principal
-val RosaClaro = Color(0xFFF8BBD0)
-val RosaMedio = Color(0xFFEC407A)
-val RosaEscuro = Color(0xFFAD1457)
-
-val LilasClaro = Color(0xFFE1BEE7)
-val LilasMedio = Color(0xFFAB47BC)
-val LilasEscuro = Color(0xFF6A1B9A)
-
-// Neutros
-val FundoClaro = Color(0xFFFFF1F6)
-val FundoEscuro = Color(0xFF1C1018)
-val SuperficieClara = Color(0xFFFFFFFF)
-val SuperficieEscura = Color(0xFF2A1A24)
-val TextoClaro = Color(0xFF3A1F2B)
-val TextoEscuro = Color(0xFFF5E6EE)
+val Preto = Color(0xFF09080D)
+val Fundo = Color(0xFF0E0C13)
+val Superficie = Color(0xFF17141E)
+val SuperficieElevada = Color(0xFF211C2B)
+val Lilas = Color(0xFF9B5CFF)
+val LilasClaro = Color(0xFFC8A4FF)
+val LilasEscuro = Color(0xFF3D2366)
+val Branco = Color(0xFFF8F7FB)
+val TextoSecundario = Color(0xFFB8B1C6)
+val Divisor = Color(0xFF302A3A)
+val Sucesso = Color(0xFF63D59B)
+val Aviso = Color(0xFFFFC857)
