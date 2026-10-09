@@ -309,14 +309,14 @@ private fun ListaTreinos(
                             Button(
                                 onClick = { onStart(t) },
                                 enabled = t.exercicios.isNotEmpty(),
-                                Modifier.weight(1f),
+                                modifier = Modifier.weight(1f),
                                 shape = RoundedCornerShape(14.dp)
                             ) {
                                 Icon(Icons.Default.PlayArrow, null); Spacer(Modifier.width(5.dp)); Text("Iniciar")
                             }
                             OutlinedButton(
                                 onClick = { onOpen(t) },
-                                Modifier.weight(1f),
+                                modifier = Modifier.weight(1f),
                                 shape = RoundedCornerShape(14.dp)
                             ) {
                                 Icon(Icons.Default.Edit, null); Spacer(Modifier.width(5.dp)); Text("Editar")
