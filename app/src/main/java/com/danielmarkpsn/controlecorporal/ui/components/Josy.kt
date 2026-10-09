@@ -37,7 +37,7 @@ fun JosyHero(
                         Icon(Icons.Default.AutoAwesome, null, tint = Lilas, modifier = Modifier.padding(7.dp))
                     }
                     Spacer(Modifier.width(8.dp))
-                    Text("JOSY • SUA PARCEIRA", color = LilasClaro, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold)
+                    Text("SUA PARCEIRA DE EVOLUÇÃO", color = LilasClaro, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold)
                 }
                 Text(title, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
                 Text(message, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -56,12 +56,12 @@ fun JosyHero(
 }
 
 @Composable
-fun JosyMini(modifier: Modifier = Modifier, message: String = "Vamos evoluir juntos!") {
+fun JosyMini(modifier: Modifier = Modifier, message: String = "Sua melhor versão é o seu maior objetivo!") {
     Row(modifier.clip(RoundedCornerShape(18.dp)).background(MaterialTheme.colorScheme.surfaceVariant).padding(10.dp), verticalAlignment = Alignment.CenterVertically) {
         Image(painterResource(R.drawable.josy_mascote), "Josy", contentScale = ContentScale.Fit, modifier = Modifier.size(width = 66.dp, height = 76.dp).clip(RoundedCornerShape(12.dp)))
         Spacer(Modifier.width(10.dp))
         Column(Modifier.weight(1f)) {
-            Text("Josy", fontWeight = FontWeight.Bold)
+            Text("Josy • Controle Corporal", fontWeight = FontWeight.Bold)
             Text(message, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
         Icon(Icons.Default.FitnessCenter, null, tint = Lilas)
