@@ -141,5 +141,5 @@ private fun ActionCard(title: String, subtitle: String, icon: androidx.compose.u
 
 @Composable
 private fun SmallAction(title: String, icon: androidx.compose.ui.graphics.vector.ImageVector, onClick: () -> Unit, modifier: Modifier) {
-    FilledTonalButton(onClick = onClick, modifier = modifier.height(52.dp)) { Icon(icon, null); Spacer(Modifier.width(5.dp)); Text(title) }
+    FilledTonalButton(onClick = onClick, modifier = modifier.height(52.dp), contentPadding = PaddingValues(horizontal = 6.dp, vertical = 8.dp)) { Icon(icon, null, modifier = Modifier.size(18.dp)); Spacer(Modifier.width(4.dp)); Text(title, maxLines = 1, style = MaterialTheme.typography.labelMedium) }
 }
