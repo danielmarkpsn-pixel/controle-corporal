@@ -1,3 +1,5 @@
+import java.text.Normalizer
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -11,7 +13,7 @@ val prepararGifsExercicios by tasks.registering {
         val drawableDir = file("src/main/res/drawable")
         val assetsDir = file("src/main/assets/exercise_gifs")
         drawableDir.listFiles()?.filter { it.isFile && it.extension.equals("gif", ignoreCase = true) }?.forEach { gif ->
-            val base = java.text.Normalizer.normalize(gif.nameWithoutExtension, java.text.Normalizer.Form.NFD)
+            val base = Normalizer.normalize(gif.nameWithoutExtension, Normalizer.Form.NFD)
                 .replace(Regex("\\p{Mn}+"), "")
                 .replace(Regex("[^A-Za-z0-9]+"), "_")
                 .trim('_').lowercase()
