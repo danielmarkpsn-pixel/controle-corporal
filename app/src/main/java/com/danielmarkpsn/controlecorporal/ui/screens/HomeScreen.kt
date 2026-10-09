@@ -34,6 +34,8 @@ fun HomeScreen(
     val meta by viewModel.meta.collectAsStateWithLifecycle()
     val imc by viewModel.imcAtual.collectAsStateWithLifecycle()
     val classificacao by viewModel.classificacaoImc.collectAsStateWithLifecycle()
+    val pesoAtual = ultimoPeso
+    val metaAtual = meta
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -70,8 +72,8 @@ fun HomeScreen(
                         Text("DICA DA JOSY", color = Lilas, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.ExtraBold)
                         Text(
                             when {
-                                ultimoPeso == null -> "Comece registrando seu peso. Pequenos passos ajudam a enxergar sua evolução!"
-                                meta?.pesoAlvoKg != null && meta.pesoAlvoKg > 0f && ultimoPeso.pesoKg <= meta.pesoAlvoKg -> "Você chegou à meta cadastrada! Celebre a conquista e mantenha hábitos consistentes."
+                                pesoAtual == null -> "Comece registrando seu peso. Pequenos passos ajudam a enxergar sua evolução!"
+                                metaAtual != null && metaAtual.pesoAlvoKg > 0f && pesoAtual.pesoKg <= metaAtual.pesoAlvoKg -> "Você chegou à meta cadastrada! Celebre a conquista e mantenha hábitos consistentes."
                                 imc <= 0f -> "Registre sua altura para acompanhar o IMC junto com o peso. Lembre-se: o IMC é apenas um indicador geral."
                                 else -> "Treine com técnica, respeite seu descanso e registre seus resultados. Consistência vale mais que perfeição!"
                             },
