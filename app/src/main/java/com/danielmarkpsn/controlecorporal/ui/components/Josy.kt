@@ -3,7 +3,6 @@ package com.danielmarkpsn.controlecorporal.ui.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoAwesome
@@ -48,7 +47,7 @@ fun JosyHero(
             Image(
                 painter = painterResource(R.drawable.josy_mascote),
                 contentDescription = "Josy, mascote do Controle Corporal",
-                contentScale = ContentScale.Crop,
+                contentScale = ContentScale.Fit,
                 modifier = Modifier.width(145.dp).height(190.dp)
             )
         }
@@ -58,7 +57,7 @@ fun JosyHero(
 @Composable
 fun JosyMini(modifier: Modifier = Modifier, message: String = "Vamos evoluir juntos!") {
     Row(modifier.clip(RoundedCornerShape(18.dp)).background(MaterialTheme.colorScheme.surfaceVariant).padding(10.dp), verticalAlignment = Alignment.CenterVertically) {
-        Image(painterResource(R.drawable.josy_mascote), "Josy", contentScale = ContentScale.Crop, modifier = Modifier.size(58.dp).clip(CircleShape))
+        Image(painterResource(R.drawable.josy_mascote), "Josy", contentScale = ContentScale.Fit, modifier = Modifier.size(width = 66.dp, height = 76.dp).clip(RoundedCornerShape(12.dp)))
         Spacer(Modifier.width(10.dp))
         Column(Modifier.weight(1f)) {
             Text("Josy", fontWeight = FontWeight.Bold)
