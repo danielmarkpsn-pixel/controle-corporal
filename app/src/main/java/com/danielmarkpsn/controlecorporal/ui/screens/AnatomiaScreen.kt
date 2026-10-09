@@ -2,6 +2,10 @@ package com.danielmarkpsn.controlecorporal.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -44,11 +48,10 @@ private val grupos=listOf("Todos","Pernas","Peito","Costas","Ombros","Braços","
         LazyColumn(Modifier.padding(p).fillMaxSize(),contentPadding=PaddingValues(16.dp),verticalArrangement=Arrangement.spacedBy(12.dp)){
             item{JosyMini(message="Escolha um exercício e eu te mostro foco, técnica e cuidados.")}
             item{OutlinedTextField(busca,{busca=it},Modifier.fillMaxWidth(),singleLine=true,leadingIcon={Icon(Icons.Default.Search,null)},placeholder={Text("Buscar exercício ou músculo...")})}
-            item{Row(horizontalArrangement=Arrangement.spacedBy(5.dp),modifier=Modifier.fillMaxWidth()){grupos.take(3).forEach{g->FilterChip(filtro==g,{filtro=g},label={Text(g)},modifier=Modifier.weight(1f))}}}
-            item{Row(horizontalArrangement=Arrangement.spacedBy(5.dp),modifier=Modifier.fillMaxWidth()){grupos.drop(3).take(4).forEach{g->FilterChip(filtro==g,{filtro=g},label={Text(g)},modifier=Modifier.weight(1f))}}}
+            item{Row(horizontalArrangement=Arrangement.spacedBy(8.dp),modifier=Modifier.fillMaxWidth().horizontalScroll(rememberScrollState())){grupos.forEach{g->FilterChip(selected=filtro==g,onClick={filtro=g},label={Text(g,maxLines=1)})}}}
             item{Text(filtrados.size.toString()+" exercícios disponíveis",color=Lilas,fontWeight=FontWeight.Bold)}
             items(filtrados){e->Card(onClick={selecionado=e},colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant),modifier=Modifier.fillMaxWidth()){Row(Modifier.padding(10.dp),horizontalArrangement=Arrangement.spacedBy(12.dp)){Image(painterResource(e.imagem),e.nome,Modifier.size(92.dp),contentScale=ContentScale.Fit);Column(Modifier.weight(1f)){Text(e.nome,style=MaterialTheme.typography.titleMedium,fontWeight=FontWeight.Bold);Text(e.grupo,color=Lilas,style=MaterialTheme.typography.labelMedium);Text(e.foco,style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant);Text("Ver ficha completa  ›",color=Lilas,fontWeight=FontWeight.SemiBold)}}}}
         }
     }
-    selecionado?.let{e->AlertDialog(onDismissRequest={selecionado=null},title={Text(e.nome,fontWeight=FontWeight.Bold)},text={Column(verticalArrangement=Arrangement.spacedBy(8.dp)){Image(painterResource(e.imagem),e.nome,Modifier.fillMaxWidth().height(150.dp),contentScale=ContentScale.Fit);AssistChip(onClick={},label={Text(e.grupo)});Text("Músculos envolvidos",fontWeight=FontWeight.Bold);Text(e.foco);Text("Passo a passo",fontWeight=FontWeight.Bold);Text(e.tecnica);Text("Dica de segurança",fontWeight=FontWeight.Bold);Text(e.cuidado,color=MaterialTheme.colorScheme.onSurfaceVariant)}},confirmButton={Button(onClick={selecionado=null}){Text("Fechar")}})}
+    selecionado?.let{e->Dialog(onDismissRequest={selecionado=null},properties=DialogProperties(usePlatformDefaultWidth=false)){Box(Modifier.fillMaxSize().padding(0.dp)){Image(painterResource(e.imagem),contentDescription=null,modifier=Modifier.fillMaxSize(),contentScale=ContentScale.Fit)}}}
 }
