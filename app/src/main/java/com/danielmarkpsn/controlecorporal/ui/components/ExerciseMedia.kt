@@ -15,9 +15,10 @@ import coil.request.ImageRequest
 import coil.decode.GifDecoder
 
 private val exerciseGifs = listOf(
-    "agachamento" to "agachamento_com_kettlebell",
+    "agachamento sumô" to "agachamento_sumo",
+    "agachamento com salto" to "agachamento_com_salto",
+    "agachamento" to "agachamento_com_salto",
     "mesa flexora" to "cadeira_flexora",
-    "supino" to "supino_declinado",
     "crucifixo" to "crucifixo",
     "puxada" to "pulley_costas",
     "remada curvada" to "remada_curvada",
@@ -25,7 +26,6 @@ private val exerciseGifs = listOf(
     "elevação lateral" to "elevacao_lateral_na_polia",
     "rosca direta" to "rosca_direta_na_barra_w",
     "rosca martelo" to "rosca_martelo_corda",
-    "tríceps" to "triceps_frances",
     "abdominal" to "abdominal_cruzado",
     "barra fixa" to "barra_fixa",
     "afundo" to "afundo",
@@ -33,7 +33,6 @@ private val exerciseGifs = listOf(
     "levantamento terra" to "levantamento_terra_romeno",
     "encolhimento" to "encolhimento",
     "passada lateral" to "passada_lateral",
-    "agachamento sumô" to "agachamento_sumo"
 )
 
 private fun gifAssetFor(name: String): String? {
