@@ -60,6 +60,26 @@ fun HomeScreen(
                 MetricCard("IMC", if (imc > 0f) "%.1f".format(imc) else "—", if (imc > 0f) classificacao else "Cadastre altura", Modifier.weight(1f))
                 MetricCard("META", meta?.pesoAlvoKg?.takeIf { it > 0f }?.let { "%.1f kg".format(it) } ?: "—", "Objetivo", Modifier.weight(1f))
             }
+            Card(
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+                shape = MaterialTheme.shapes.extraLarge
+            ) {
+                Row(Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Icon(Icons.Default.Favorite, contentDescription = null, tint = Lilas, modifier = Modifier.size(28.dp))
+                    Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
+                        Text("DICA DA JOSY", color = Lilas, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.ExtraBold)
+                        Text(
+                            when {
+                                ultimoPeso == null -> "Comece registrando seu peso. Pequenos passos ajudam a enxergar sua evolução!"
+                                meta?.pesoAlvoKg != null && meta.pesoAlvoKg > 0f && ultimoPeso.pesoKg <= meta.pesoAlvoKg -> "Você chegou à meta cadastrada! Celebre a conquista e mantenha hábitos consistentes."
+                                imc <= 0f -> "Registre sua altura para acompanhar o IMC junto com o peso. Lembre-se: o IMC é apenas um indicador geral."
+                                else -> "Treine com técnica, respeite seu descanso e registre seus resultados. Consistência vale mais que perfeição!"
+                            },
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                }
+            }
             Text("Centro de controle", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
             Text("Tudo o que você precisa em um só lugar.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             ActionCard("Treinos", "Divisões, exercícios, registros e evolução", Icons.Default.FitnessCenter, onVerTreinos, true)
