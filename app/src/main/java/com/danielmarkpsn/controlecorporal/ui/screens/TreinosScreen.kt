@@ -44,7 +44,7 @@ fun TreinosScreen(onVoltar: () -> Unit) {
             }
             when(tab){
                 0->LazyColumn(contentPadding=PaddingValues(16.dp),verticalArrangement=Arrangement.spacedBy(14.dp)){
-                    item{JosyHero("Seu treino começa aqui.","A Josy organiza sua rotina, registra suas séries e ajuda você a acompanhar evolução.", "Treinos prontos".let{it}, {treinos=(treinos+TreinoPresets.todos).distinctBy{it.nome};storage.salvar(treinos)})}
+                    item{JosyHero(title = "Seu treino começa aqui.", message = "A Josy organiza sua rotina, registra suas séries e ajuda você a acompanhar evolução.", actionLabel = "Treinos prontos", onAction = { treinos = (treinos + TreinoPresets.todos).distinctBy { it.nome }; storage.salvar(treinos) })}
                     item{Row(horizontalArrangement=Arrangement.spacedBy(8.dp),modifier=Modifier.fillMaxWidth()){Info("SESSÕES",historico.size.toString(),Icons.Default.EventAvailable,Modifier.weight(1f));Info("VOLUME","%.0f kg".format(volume),Icons.Default.TrendingUp,Modifier.weight(1f));Info("TREINOS",treinos.size.toString(),Icons.Default.FitnessCenter,Modifier.weight(1f))}}
                     item{Text("Divisão de treino",style=MaterialTheme.typography.titleMedium,fontWeight=FontWeight.Bold)}
                     item{Row(horizontalArrangement=Arrangement.spacedBy(5.dp),modifier=Modifier.fillMaxWidth()){divisao.forEach{d->FilterChip(filtro==d,{filtro=d},label={Text(d)},modifier=Modifier.weight(1f))}}}
