@@ -35,7 +35,7 @@ private val grupos=listOf("Todos","Pernas","Peito","Costas","Ombros","Braços")
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable fun AnatomiaScreen(onVoltar:()->Unit){
-    var filtro by remember{"Todos"};var busca by remember{mutableStateOf("")};var selecionado by remember{mutableStateOf<Ex?>(null)}
+    var filtro by remember { mutableStateOf("Todos") };var busca by remember{mutableStateOf("")};var selecionado by remember{mutableStateOf<Ex?>(null)}
     val filtrados=lista.filter{(filtro=="Todos"||it.grupo==filtro)&&(busca.isBlank()||it.nome.contains(busca,true)||it.foco.contains(busca,true))}
     Scaffold(containerColor=MaterialTheme.colorScheme.background,topBar={TopAppBar(title={Text("Biblioteca",fontWeight=FontWeight.Bold)},navigationIcon={IconButton(onClick=onVoltar){Icon(Icons.Default.ArrowBack,"Voltar")}},colors=TopAppBarDefaults.topAppBarColors(containerColor=MaterialTheme.colorScheme.background))}){p->
         LazyColumn(Modifier.padding(p).fillMaxSize(),contentPadding=PaddingValues(16.dp),verticalArrangement=Arrangement.spacedBy(12.dp)){
