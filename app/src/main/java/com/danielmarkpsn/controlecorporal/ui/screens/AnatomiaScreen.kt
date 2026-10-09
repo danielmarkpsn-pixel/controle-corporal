@@ -19,6 +19,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.danielmarkpsn.controlecorporal.R
 import com.danielmarkpsn.controlecorporal.ui.components.JosyMini
+import com.danielmarkpsn.controlecorporal.ui.components.ExerciseMedia
+import com.danielmarkpsn.controlecorporal.ui.components.ExerciseMediaFullScreen
 import com.danielmarkpsn.controlecorporal.ui.theme.Lilas
 
 private data class Ex(val nome:String,val grupo:String,val foco:String,val tecnica:String,val cuidado:String,val imagem:Int)
@@ -50,8 +52,8 @@ private val grupos=listOf("Todos","Pernas","Peito","Costas","Ombros","Braços","
             item{OutlinedTextField(busca,{busca=it},Modifier.fillMaxWidth(),singleLine=true,leadingIcon={Icon(Icons.Default.Search,null)},placeholder={Text("Buscar exercício ou músculo...")})}
             item{Row(horizontalArrangement=Arrangement.spacedBy(8.dp),modifier=Modifier.fillMaxWidth().horizontalScroll(rememberScrollState())){grupos.forEach{g->FilterChip(selected=filtro==g,onClick={filtro=g},label={Text(g,maxLines=1)})}}}
             item{Text(filtrados.size.toString()+" exercícios disponíveis",color=Lilas,fontWeight=FontWeight.Bold)}
-            items(filtrados){e->Card(onClick={selecionado=e},colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant),modifier=Modifier.fillMaxWidth()){Row(Modifier.padding(10.dp),horizontalArrangement=Arrangement.spacedBy(12.dp)){Image(painterResource(e.imagem),e.nome,Modifier.size(92.dp),contentScale=ContentScale.Fit);Column(Modifier.weight(1f)){Text(e.nome,style=MaterialTheme.typography.titleMedium,fontWeight=FontWeight.Bold);Text(e.grupo,color=Lilas,style=MaterialTheme.typography.labelMedium);Text(e.foco,style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant);Text("Ver ficha completa  ›",color=Lilas,fontWeight=FontWeight.SemiBold)}}}}
+            items(filtrados){e->Card(onClick={selecionado=e},colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant),modifier=Modifier.fillMaxWidth()){Row(Modifier.padding(10.dp),horizontalArrangement=Arrangement.spacedBy(12.dp)){ExerciseMedia(e.nome, e.imagem, Modifier.size(92.dp), contentScale=ContentScale.Fit);Column(Modifier.weight(1f)){Text(e.nome,style=MaterialTheme.typography.titleMedium,fontWeight=FontWeight.Bold);Text(e.grupo,color=Lilas,style=MaterialTheme.typography.labelMedium);Text(e.foco,style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant);Text("Ver ficha completa  ›",color=Lilas,fontWeight=FontWeight.SemiBold)}}}}
         }
     }
-    selecionado?.let{e->Dialog(onDismissRequest={selecionado=null},properties=DialogProperties(usePlatformDefaultWidth=false)){Box(Modifier.fillMaxSize().padding(0.dp)){Image(painterResource(e.imagem),contentDescription=null,modifier=Modifier.fillMaxSize(),contentScale=ContentScale.Fit)}}}
+    selecionado?.let { e -> ExerciseMediaFullScreen(e.nome, e.imagem) { selecionado = null } }
 }
