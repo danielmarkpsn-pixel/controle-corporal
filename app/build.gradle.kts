@@ -5,6 +5,24 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
+// Os GIFs com espaços/acentos não podem ficar em res/drawable.
+val prepararGifsExercicios by tasks.registering {
+    doLast {
+        val drawableDir = file("src/main/res/drawable")
+        val assetsDir = file("src/main/assets/exercise_gifs")
+        drawableDir.listFiles()?.filter { it.isFile && it.extension.equals("gif", ignoreCase = true) }?.forEach { gif ->
+            val base = java.text.Normalizer.normalize(gif.nameWithoutExtension, java.text.Normalizer.Form.NFD)
+                .replace(Regex("\\p{Mn}+"), "")
+                .replace(Regex("[^A-Za-z0-9]+"), "_")
+                .trim('_').lowercase()
+            assetsDir.mkdirs()
+            gif.copyTo(File(assetsDir, "$base.gif"), overwrite = true)
+            gif.delete()
+        }
+    }
+}
+tasks.named("preBuild").configure { dependsOn(prepararGifsExercicios) }
+
 android {
     namespace = "com.danielmarkpsn.controlecorporal"
     compileSdk = 36
@@ -92,6 +110,7 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     implementation(libs.coil.compose)
+    implementation(libs.coil.gif)
     ksp(libs.androidx.room.compiler)
 
     debugImplementation(libs.androidx.ui.tooling)
