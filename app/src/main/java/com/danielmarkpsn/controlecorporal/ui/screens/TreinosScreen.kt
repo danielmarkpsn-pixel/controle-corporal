@@ -21,6 +21,8 @@ import androidx.compose.ui.unit.dp
 import com.danielmarkpsn.controlecorporal.R
 import com.danielmarkpsn.controlecorporal.data.*
 import com.danielmarkpsn.controlecorporal.ui.components.JosyHero
+import com.danielmarkpsn.controlecorporal.ui.components.ExerciseMedia
+import com.danielmarkpsn.controlecorporal.ui.components.ExerciseMediaFullScreen
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -812,21 +814,17 @@ fun ExercicioVisual(nome: String, musculo: String, modifier: Modifier = Modifier
         "abdominal" in n -> R.drawable.img_abdominal
         else -> R.drawable.img_agachamento
     }
-
-    Card(modifier = modifier) {
+    var mostrarTelaCheia by remember(nome) { mutableStateOf(false) }
+    Card(modifier = modifier, onClick = { mostrarTelaCheia = true }) {
         Column {
-            Image(
-                painter = painterResource(id = imagem),
-                contentDescription = "Ilustração de $nome",
-                modifier = Modifier.fillMaxWidth().height(150.dp),
-                contentScale = ContentScale.Fit
-            )
+            ExerciseMedia(nome, imagem, Modifier.fillMaxWidth().height(150.dp), ContentScale.Fit)
             Column(Modifier.padding(12.dp)) {
                 Text(nome, fontWeight = FontWeight.Bold)
                 Text(musculo, style = MaterialTheme.typography.labelMedium)
             }
         }
     }
+    if (mostrarTelaCheia) ExerciseMediaFullScreen(nome, imagem) { mostrarTelaCheia = false }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
