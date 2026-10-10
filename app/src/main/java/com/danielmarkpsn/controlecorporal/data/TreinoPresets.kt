@@ -144,6 +144,78 @@ object TreinoPresets {
                 ex("Prancha","Abdômen",2,30,"Mantenha o corpo alinhado.","Respire continuamente.","Evite deixar o quadril cair.")
             ),
             listOf("Seg","Qua","Sex")
+        ),
+        Treino(
+            "Grupo muscular — Peito",
+            "Hipertrofia",
+            listOf(
+                ex("Supino inclinado","Peito",3,10,"Mantenha as escápulas estáveis e desça a carga com controle."),
+                ex("Crucifixo","Peito",3,12,"Mantenha leve flexão nos cotovelos e controle a abertura."),
+                ex("Supino reto","Peito",3,10,"Mantenha os pés firmes e empurre sem perder a postura.")
+            ), listOf("Seg")
+        ),
+        Treino(
+            "Grupo muscular — Costas",
+            "Hipertrofia",
+            listOf(
+                ex("Pulley costas","Costas",3,10,"Puxe em direção à parte superior do peito e controle o retorno."),
+                ex("Remada curvada","Costas",3,10,"Mantenha a coluna neutra e conduza o movimento com os cotovelos."),
+                ex("Remada baixa","Costas",3,12,"Estabilize o tronco e controle a volta do cabo.")
+            ), listOf("Ter")
+        ),
+        Treino(
+            "Grupo muscular — Ombros",
+            "Hipertrofia",
+            listOf(
+                ex("Desenvolvimento de ombros","Ombros",3,10,"Empurre verticalmente mantendo o tronco firme."),
+                ex("Elevação lateral","Ombros",3,12,"Eleve os braços com controle, sem impulso."),
+                ex("Voador invertido","Ombros e costas",3,12,"Abra os braços controlando o movimento e mantendo o tronco estável.")
+            ), listOf("Qua")
+        ),
+        Treino(
+            "Grupo muscular — Bíceps",
+            "Hipertrofia",
+            listOf(
+                ex("Rosca direta","Bíceps",3,10,"Flexione os cotovelos sem balançar o tronco."),
+                ex("Rosca martelo","Bíceps",3,12,"Mantenha pegada neutra e controle subida e descida."),
+                ex("Rosca concentrada","Bíceps",3,12,"Apoie o braço e execute a flexão sem impulso.")
+            ), listOf("Qui")
+        ),
+        Treino(
+            "Grupo muscular — Tríceps",
+            "Hipertrofia",
+            listOf(
+                ex("Tríceps na polia","Tríceps",3,12,"Mantenha os cotovelos próximos ao corpo e estenda com controle."),
+                ex("Tríceps francês","Tríceps",3,10,"Desça a carga atrás da cabeça sem abrir excessivamente os cotovelos."),
+                ex("Supino reto","Peito e tríceps",3,10,"Mantenha as escápulas estáveis e empurre com controle.")
+            ), listOf("Sex")
+        ),
+        Treino(
+            "Grupo muscular — Quadríceps",
+            "Hipertrofia",
+            listOf(
+                ex("Agachamento","Quadríceps",3,10,"Mantenha os pés firmes e os joelhos alinhados com os pés."),
+                ex("Leg press","Quadríceps",3,12,"Mantenha as costas apoiadas e controle a descida."),
+                ex("Cadeira extensora","Quadríceps",3,12,"Estenda os joelhos de forma controlada.")
+            ), listOf("Seg")
+        ),
+        Treino(
+            "Grupo muscular — Posteriores e glúteos",
+            "Hipertrofia",
+            listOf(
+                ex("Stiff","Posteriores e glúteos",3,10,"Leve o quadril para trás mantendo a coluna neutra e a carga próxima às pernas."),
+                ex("Mesa flexora","Posterior de coxa",3,12,"Flexione os joelhos com controle, mantendo o quadril apoiado."),
+                ex("Elevação pélvica","Glúteos",3,12,"Eleve o quadril contraindo os glúteos sem hiperestender a lombar.")
+            ), listOf("Qua")
+        ),
+        Treino(
+            "Grupo muscular — Abdômen",
+            "Resistência",
+            listOf(
+                ex("Abdominal curto","Abdômen",3,15,"Contraia o abdômen sem puxar a cabeça."),
+                ex("Abdominal cruzado","Abdômen oblíquo",3,12,"Gire o tronco com controle sem puxar o pescoço."),
+                ex("Abdominal declinado","Abdômen",3,12,"Execute a flexão do tronco com controle, sem impulso.")
+            ), listOf("Sex")
         )
     )
 }
