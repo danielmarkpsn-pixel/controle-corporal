@@ -75,17 +75,23 @@ fun ExerciseMedia(
     name: String,
     fallbackDrawable: Int,
     modifier: Modifier = Modifier,
-    contentScale: ContentScale = ContentScale.Fit
+    contentScale: ContentScale = ContentScale.Fit,
+    useGif: Boolean = true,
+    usePng: Boolean = true
 ) {
     val context = LocalContext.current
     val gif = gifAssetFor(name)
-    if (gif == null) {
-        Image(
-            painter = painterResource(fallbackDrawable),
-            contentDescription = "Ilustração de $name",
-            modifier = modifier,
-            contentScale = contentScale
-        )
+    if (!useGif || gif == null) {
+        if (usePng) {
+            Image(
+                painter = painterResource(fallbackDrawable),
+                contentDescription = "Ilustração de $name",
+                modifier = modifier,
+                contentScale = contentScale
+            )
+        } else {
+            Box(modifier = modifier)
+        }
     } else {
         AsyncImage(
             model = ImageRequest.Builder(context)
