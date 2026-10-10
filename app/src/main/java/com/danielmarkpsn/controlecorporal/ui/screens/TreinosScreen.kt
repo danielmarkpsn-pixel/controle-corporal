@@ -842,6 +842,7 @@ private fun ResumoTreinoLinha(rotulo: String, valor: String) {
         Text(valor, fontWeight = FontWeight.Bold)
     }
 }
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ExecucaoTreino(treino: Treino, onBack: () -> Unit, onRegisterSet: (SerieRegistro) -> Unit, onFinish: (TreinoHistorico) -> Unit) {
     val inicio = remember { System.currentTimeMillis() }
