@@ -133,7 +133,7 @@ fun TreinosScreen(onVoltar: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Treinos", fontWeight = FontWeight.Bold) },
+                title = { Text("TREINOS", fontWeight = FontWeight.Bold) },
                 navigationIcon = { IconButton(onClick = onVoltar) { Icon(Icons.Default.ArrowBack, "Voltar") } }
             )
         },
@@ -142,7 +142,7 @@ fun TreinosScreen(onVoltar: () -> Unit) {
         },
         bottomBar = {
             NavigationBar {
-                NavigationBarItem(aba == 0, { aba = 0 }, { Icon(Icons.Default.FitnessCenter, null) }, label = { Text("Treinos") })
+                NavigationBarItem(aba == 0, { aba = 0 }, { Icon(Icons.Default.FitnessCenter, null) }, label = { Text("TREINOS") })
                 NavigationBarItem(aba == 1, { aba = 1 }, { Icon(Icons.Default.DateRange, null) }, label = { Text("Semana") })
                 NavigationBarItem(aba == 2, { aba = 2 }, { Icon(Icons.Default.History, null) }, label = { Text("Histórico") })
             }
@@ -817,14 +817,14 @@ fun ExercicioVisual(nome: String, musculo: String, modifier: Modifier = Modifier
     var mostrarTelaCheia by remember(nome) { mutableStateOf(false) }
     Card(modifier = modifier, onClick = { mostrarTelaCheia = true }) {
         Column {
-            ExerciseMedia(nome, imagem, Modifier.fillMaxWidth().height(150.dp), ContentScale.Fit)
+            ExerciseMedia(nome, imagem, Modifier.fillMaxWidth().height(150.dp), ContentScale.Fit, useGif = true, usePng = false)
             Column(Modifier.padding(12.dp)) {
                 Text(nome, fontWeight = FontWeight.Bold)
                 Text(musculo, style = MaterialTheme.typography.labelMedium)
             }
         }
     }
-    if (mostrarTelaCheia) ExerciseMediaFullScreen(nome, imagem) { mostrarTelaCheia = false }
+    if (mostrarTelaCheia) ExerciseMediaFullScreen(nome, imagem, { mostrarTelaCheia = false }, useGif = true, usePng = false)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
