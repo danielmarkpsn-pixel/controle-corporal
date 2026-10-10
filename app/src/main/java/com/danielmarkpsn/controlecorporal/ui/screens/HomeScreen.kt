@@ -85,8 +85,8 @@ fun HomeScreen(
             }
             Text("Centro de controle", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
             Text("Tudo o que você precisa em um só lugar.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            ActionCard("Treinos", "Divisões, exercícios, registros e evolução", Icons.Default.FitnessCenter, onVerTreinos, true)
-            ActionCard("Biblioteca de exercícios", "Técnica, músculos envolvidos e dicas", Icons.Default.MenuBook, onVerAnatomia, false)
+            ActionCard("TREINOS", "Divisões, exercícios, registros e evolução", Icons.Default.FitnessCenter, onVerTreinos, true)
+            ActionCard("DICAS DA JOSY", "Imagens PNG, técnica, músculos e dicas", Icons.Default.MenuBook, onVerAnatomia, false)
             ActionCard("EXECUÇÕES", "GIFs animados para visualizar os movimentos", Icons.Default.PlayCircle, onVerExecucoes, true)
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
                 SmallAction("Evolução", Icons.Default.ShowChart, onVerGrafico, Modifier.weight(1f))
