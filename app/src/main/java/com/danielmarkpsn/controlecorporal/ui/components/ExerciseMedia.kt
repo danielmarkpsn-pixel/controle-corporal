@@ -17,6 +17,7 @@ import coil.decode.GifDecoder
 private val exerciseGifs = listOf(
     "agachamento sumô" to "agachamento_sumo",
     "agachamento com salto" to "agachamento_com_salto",
+    "agachamento com kettlebell" to "agachamento_com_kettlebell",
     "agachamento" to "agachamento_com_salto",
     "mesa flexora" to "cadeira_flexora",
     "crucifixo" to "crucifixo",
@@ -66,7 +67,7 @@ private val exerciseGifs = listOf(
 
 private fun gifAssetFor(name: String): String? {
     val normalized = name.trim().lowercase()
-    return exerciseGifs.firstOrNull { (key, _) -> key in normalized }?.second
+    return exerciseGifs.sortedByDescending { it.first.length }.firstOrNull { (key, _) -> key in normalized }?.second
 }
 
 @Composable
