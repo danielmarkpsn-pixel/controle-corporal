@@ -514,19 +514,94 @@ private fun AddExerciseDialog(onClose: () -> Unit, onAdd: (TreinoExercicio) -> U
     var series by remember { mutableStateOf("3") }
     var reps by remember { mutableStateOf("10") }
     var carga by remember { mutableStateOf("0") }
+    var busca by remember { mutableStateOf("") }
+    var grupoSelecionado by remember { mutableStateOf("Todos") }
+    val grupos = listOf("Todos", "Peito", "Costas", "Ombros", "Bíceps", "Tríceps", "Pernas", "Glúteos", "Abdômen")
+    val disponiveis = biblioteca.filter { (exercicio, grupo) ->
+        (grupoSelecionado == "Todos" || grupo == grupoSelecionado ||
+            (grupoSelecionado == "Pernas" && grupo in listOf("Quadríceps", "Posterior de coxa"))) &&
+            (busca.isBlank() || exercicio.contains(busca, ignoreCase = true) || grupo.contains(busca, ignoreCase = true))
+    }
     AlertDialog(
         onDismissRequest = onClose,
         title = { Text("Adicionar exercício") },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(7.dp)) {
-                OutlinedTextField(nome, { nome = it }, label = { Text("Exercício") }, singleLine = true)
-                Text("Sugestões: ${biblioteca.take(8).joinToString(", ")}", style = MaterialTheme.typography.bodySmall)
-                OutlinedTextField(musculo, { musculo = it }, label = { Text("Músculo") }, singleLine = true)
-                Row(horizontalArrangement = Arrangement.spacedBy(7.dp)) {
-                    OutlinedTextField(series, { series = it.filter(Char::isDigit) }, label = { Text("Séries") }, modifier = Modifier.weight(1f), singleLine = true)
-                    OutlinedTextField(reps, { reps = it.filter(Char::isDigit) }, label = { Text("Reps") }, modifier = Modifier.weight(1f), singleLine = true)
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                OutlinedTextField(
+                    value = busca, onValueChange = { busca = it },
+                    label = { Text("Buscar exercício") }, leadingIcon = { Icon(Icons.Default.Search, null) },
+                    singleLine = true, modifier = Modifier.fillMaxWidth()
+                )
+                androidx.compose.foundation.lazy.LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    items(grupos) { grupo ->
+                        FilterChip(
+                            selected = grupoSelecionado == grupo,
+                            onClick = { grupoSelecionado = grupo },
+                            label = { Text(grupo) }
+                        )
+                    }
                 }
-                OutlinedTextField(carga, { carga = it.filter { c -> c.isDigit() || c == '.' || c == ',' } }, label = { Text("Carga kg") }, singleLine = true)
+                Text("Toque em um exercício para preencher a ficha", style = MaterialTheme.typography.labelMedium)
+                LazyColumn(
+                    modifier = Modifier.fillMaxWidth().heightIn(max = 190.dp),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    items(disponiveis) { (exercicio, grupo) ->
+                        Card(
+                            onClick = {
+                                nome = exercicio
+                                musculo = grupo
+                            },
+                            colors = CardDefaults.cardColors(
+                                containerColor = if (nome == exercicio) MaterialTheme.colorScheme.primaryContainer
+                                else MaterialTheme.colorScheme.surfaceVariant
+                            )
+                        ) {
+                            Row(
+                                Modifier.fillMaxWidth().padding(horizontal = 10.dp, vertical = 8.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Icon(Icons.Default.FitnessCenter, null, Modifier.size(20.dp))
+                                Spacer(Modifier.width(8.dp))
+                                Column(Modifier.weight(1f)) {
+                                    Text(exercicio, fontWeight = FontWeight.SemiBold)
+                                    Text(grupo, style = MaterialTheme.typography.labelSmall)
+                                }
+                                if (nome == exercicio) Icon(Icons.Default.CheckCircle, "Selecionado")
+                            }
+                        }
+                    }
+                    if (disponiveis.isEmpty()) {
+                        item { Text("Nenhum exercício encontrado para esse filtro.") }
+                    }
+                }
+                OutlinedTextField(
+                    value = nome, onValueChange = { nome = it },
+                    label = { Text("Nome do exercício") }, singleLine = true,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                OutlinedTextField(
+                    value = musculo, onValueChange = { musculo = it },
+                    label = { Text("Grupo muscular") }, singleLine = true,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Row(horizontalArrangement = Arrangement.spacedBy(7.dp)) {
+                    OutlinedTextField(
+                        value = series, onValueChange = { series = it.filter(Char::isDigit) },
+                        label = { Text("Séries") }, modifier = Modifier.weight(1f), singleLine = true
+                    )
+                    OutlinedTextField(
+                        value = reps, onValueChange = { reps = it.filter(Char::isDigit) },
+                        label = { Text("Reps") }, modifier = Modifier.weight(1f), singleLine = true
+                    )
+                }
+                OutlinedTextField(
+                    value = carga,
+                    onValueChange = { carga = it.filter { c -> c.isDigit() || c == '.' || c == ',' } },
+                    label = { Text("Carga (kg)") }, singleLine = true, modifier = Modifier.fillMaxWidth()
+                )
             }
         },
         confirmButton = {
@@ -541,7 +616,7 @@ private fun AddExerciseDialog(onClose: () -> Unit, onAdd: (TreinoExercicio) -> U
                         f.como, f.respirar, f.erros
                     ))
                 }
-            }) { Text("Adicionar") }
+            }, enabled = nome.isNotBlank()) { Text("Adicionar à ficha") }
         },
         dismissButton = { TextButton(onClick = onClose) { Text("Cancelar") } }
     )
