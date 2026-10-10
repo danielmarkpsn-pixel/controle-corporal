@@ -1,6 +1,5 @@
 package com.danielmarkpsn.controlecorporal.ui.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.lazy.LazyColumn
@@ -10,19 +9,13 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.danielmarkpsn.controlecorporal.R
 import com.danielmarkpsn.controlecorporal.data.*
 import com.danielmarkpsn.controlecorporal.ui.components.JosyHero
-import com.danielmarkpsn.controlecorporal.ui.components.ExerciseMedia
-import com.danielmarkpsn.controlecorporal.ui.components.ExerciseMediaFullScreen
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -283,15 +276,6 @@ private fun ListaTreinos(
         items(filtrados) { t ->
             Card(Modifier.fillMaxWidth(), shape = RoundedCornerShape(20.dp)) {
                 Column {
-                    if (t.exercicios.isNotEmpty()) {
-                        ExercicioVisual(t.exercicios.first().nome, t.exercicios.first().musculo, Modifier.fillMaxWidth())
-                    } else {
-                        Surface(Modifier.fillMaxWidth().height(110.dp), color = MaterialTheme.colorScheme.surfaceVariant) {
-                            Box(contentAlignment = Alignment.Center) {
-                                Icon(Icons.Default.FitnessCenter, null, Modifier.size(42.dp))
-                            }
-                        }
-                    }
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                             Column(Modifier.weight(1f)) {
@@ -494,11 +478,11 @@ private fun EditorTreino(
                 val e = ex[i]
                 Card {
                     Column(Modifier.padding(14.dp)) {
-                        ExercicioVisual(e.nome, e.musculo, Modifier.fillMaxWidth())
-                        Spacer(Modifier.height(10.dp))
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                             Column(Modifier.weight(1f)) {
-                                Text(e.nome, fontWeight = FontWeight.Bold)
+                                TextButton(onClick = { info = e }, contentPadding = PaddingValues(0.dp)) {
+                                    Text(e.nome, fontWeight = FontWeight.Bold)
+                                }
                                 Text(e.musculo)
                             }
                             IconButton(onClick = { ex = ex.filterIndexed { j, _ -> i != j } }) { Icon(Icons.Default.Delete, "Excluir") }
@@ -688,18 +672,6 @@ private fun ExerciseInfoDialog(e: TreinoExercicio, onClose: () -> Unit) {
                         label = { Text(e.musculo.ifBlank { "Geral" }) },
                         leadingIcon = { Icon(Icons.Default.FitnessCenter, null) }
                     )
-                }
-                item {
-                    Card(
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceVariant
-                        ),
-                        shape = RoundedCornerShape(18.dp)
-                    ) {
-                        Column(Modifier.padding(8.dp)) {
-                            ExercicioVisual(e.nome, e.musculo, Modifier.fillMaxWidth())
-                        }
-                    }
                 }
                 item {
                     Card {
