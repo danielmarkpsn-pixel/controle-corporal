@@ -183,14 +183,19 @@ private fun ListaTreinos(
     onOpen: (Treino) -> Unit, onStart: (Treino) -> Unit, onProntos: () -> Unit
 ) {
     var divisao by remember { mutableStateOf("Todos") }
-    val filtros = listOf("Todos", "ABC", "ABCD", "PPL", "Full Body")
+    val filtros = listOf(
+        "Todos", "ABC", "ABCD", "PPL", "Full Body",
+        "Peito", "Costas", "Ombros", "Bíceps", "Tríceps",
+        "Quadríceps", "Posteriores e glúteos", "Abdômen"
+    )
     val filtrados = treinos.filter { treino ->
         when (divisao) {
             "ABC" -> treino.nome.contains("ABC", ignoreCase = true) && !treino.nome.contains("ABCD", ignoreCase = true)
             "ABCD" -> treino.nome.contains("ABCD", ignoreCase = true)
             "PPL" -> treino.nome.contains("PPL", ignoreCase = true)
             "Full Body" -> treino.nome.contains("Full Body", ignoreCase = true)
-            else -> true
+            "Todos" -> true
+            else -> treino.nome.contains("Grupo muscular — $divisao", ignoreCase = true)
         }
     }
 
@@ -248,8 +253,11 @@ private fun ListaTreinos(
             Text("Divisões de treino", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
         }
         item {
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(7.dp)) {
-                filtros.forEach { filtro ->
+            androidx.compose.foundation.lazy.LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(7.dp),
+                contentPadding = PaddingValues(vertical = 2.dp)
+            ) {
+                items(filtros) { filtro ->
                     FilterChip(
                         selected = divisao == filtro,
                         onClick = { divisao = filtro },
@@ -912,10 +920,10 @@ private fun TreinosProntosDialog(
     var selecionado by remember { mutableStateOf<Treino?>(null) }
     AlertDialog(
         onDismissRequest = onClose,
-        title = { Text("Treinos pré-estabelecidos") },
+        title = { Text("Fichas por grupo muscular") },
         text = {
             LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                item { Text("Escolha uma divisão comum. O treino será adicionado à sua lista e poderá ser editado.", style = MaterialTheme.typography.bodyMedium) }
+                item { Text("Escolha uma ficha por músculo ou uma divisão pronta. Ela será adicionada à sua lista e poderá ser personalizada.", style = MaterialTheme.typography.bodyMedium) }
                 items(TreinoPresets.todos) { t ->
                     val existe = existentes.any { it.nome == t.nome }
                     Card(
