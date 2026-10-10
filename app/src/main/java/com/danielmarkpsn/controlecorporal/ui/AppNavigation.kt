@@ -56,7 +56,8 @@ fun AppNavigation() {
                 onVerFotos = { navController.navigate(Rotas.FOTOS) },
                 onVerRelatorio = { navController.navigate(Rotas.RELATORIO) },
                 onVerTreinos = { navController.navigate(Rotas.TREINOS) },
-                onVerAnatomia = { navController.navigate(Rotas.ANATOMIA) }
+                onVerAnatomia = { navController.navigate(Rotas.ANATOMIA) },
+                onVerExecucoes = { navController.navigate(Rotas.EXECUCOES) }
             )
         }
 
