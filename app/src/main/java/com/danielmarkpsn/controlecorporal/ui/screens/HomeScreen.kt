@@ -28,7 +28,8 @@ fun HomeScreen(
     onVerFotos: () -> Unit,
     onVerRelatorio: () -> Unit,
     onVerTreinos: () -> Unit,
-    onVerAnatomia: () -> Unit
+    onVerAnatomia: () -> Unit,
+    onVerExecucoes: () -> Unit
 ) {
     val ultimoPeso by viewModel.ultimoPeso.collectAsStateWithLifecycle()
     val meta by viewModel.meta.collectAsStateWithLifecycle()
@@ -86,6 +87,7 @@ fun HomeScreen(
             Text("Tudo o que você precisa em um só lugar.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             ActionCard("Treinos", "Divisões, exercícios, registros e evolução", Icons.Default.FitnessCenter, onVerTreinos, true)
             ActionCard("Biblioteca de exercícios", "Técnica, músculos envolvidos e dicas", Icons.Default.MenuBook, onVerAnatomia, false)
+            ActionCard("EXECUÇÕES", "GIFs animados para visualizar os movimentos", Icons.Default.PlayCircle, onVerExecucoes, true)
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
                 SmallAction("Evolução", Icons.Default.ShowChart, onVerGrafico, Modifier.weight(1f))
                 SmallAction("Histórico", Icons.Default.History, onVerHistorico, Modifier.weight(1f))
