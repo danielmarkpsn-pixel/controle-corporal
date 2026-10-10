@@ -119,7 +119,19 @@ private val execucoesDisponiveis = listOf(
     ExecucaoItem("Elevação Lateral na Polia", "Ombros", R.drawable.img_desenvolvimento),
     ExecucaoItem("Rosca Martelo", "Bíceps", R.drawable.img_rosca),
     ExecucaoItem("Execução correta da rosca punho invertida", "Antebraços", R.drawable.img_rosca),
-    ExecucaoItem("Execução correta do rack pull", "Costas e posteriores", R.drawable.img_remada))
+    ExecucaoItem("Execução correta do rack pull", "Costas e posteriores", R.drawable.img_remada),
+    ExecucaoItem("Supino Inclinado", "Peito", R.drawable.img_supino_reto),
+    ExecucaoItem("Supino Reto", "Peito", R.drawable.img_supino_reto),
+    ExecucaoItem("Tríceps na Polia", "Tríceps", R.drawable.img_triceps),
+    ExecucaoItem("Elevação Lateral na Polia Baixa", "Ombros", R.drawable.img_desenvolvimento),
+    ExecucaoItem("Encolhimento com Halteres", "Trapézio", R.drawable.img_desenvolvimento),
+    ExecucaoItem("Remada Curvada com Halteres", "Costas", R.drawable.img_remada),
+    ExecucaoItem("Rosca Martelo Alternada com Halteres", "Bíceps", R.drawable.img_rosca),
+    ExecucaoItem("Rosca Scott", "Bíceps", R.drawable.img_rosca),
+    ExecucaoItem("Cadeira Flexora", "Posteriores de coxa", R.drawable.img_mesa_flexora),
+    ExecucaoItem("Crucifixo no Chão", "Peito", R.drawable.img_crucifixo),
+    ExecucaoItem("Crucifixo com Uma Mão", "Peito", R.drawable.img_crucifixo),
+)
 
 private val filtrosExecucao = listOf("Todos", "Pernas", "Peito", "Costas", "Ombros", "Braços", "Glúteos", "Abdômen")
 
