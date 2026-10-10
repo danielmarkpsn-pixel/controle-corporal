@@ -108,7 +108,7 @@ fun ExerciseMedia(
 }
 
 @Composable
-fun ExerciseMediaFullScreen(name: String, fallbackDrawable: Int, onClose: () -> Unit) {
+fun ExerciseMediaFullScreen(name: String, fallbackDrawable: Int, onClose: () -> Unit, useGif: Boolean = true, usePng: Boolean = true) {
     val context = LocalContext.current
     val gif = gifAssetFor(name)
     Dialog(
@@ -119,13 +119,17 @@ fun ExerciseMediaFullScreen(name: String, fallbackDrawable: Int, onClose: () -> 
         )
     ) {
         Box(Modifier.fillMaxSize()) {
-            if (gif == null) {
-                Image(
-                    painter = painterResource(fallbackDrawable),
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Fit
-                )
+            if (!useGif || gif == null) {
+                if (usePng) {
+                    Image(
+                        painter = painterResource(fallbackDrawable),
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Fit
+                    )
+                } else {
+                    Box(Modifier.fillMaxSize())
+                }
             } else {
                 AsyncImage(
                     model = ImageRequest.Builder(context)
