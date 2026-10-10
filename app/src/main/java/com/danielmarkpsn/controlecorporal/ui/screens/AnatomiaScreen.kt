@@ -46,14 +46,14 @@ private val grupos=listOf("Todos","Pernas","Peito","Costas","Ombros","Braços","
 @Composable fun AnatomiaScreen(onVoltar:()->Unit){
     var filtro by remember { mutableStateOf("Todos") };var busca by remember{mutableStateOf("")};var selecionado by remember{mutableStateOf<Ex?>(null)}
     val filtrados=lista.filter{(filtro=="Todos"||it.grupo==filtro)&&(busca.isBlank()||it.nome.contains(busca,true)||it.foco.contains(busca,true))}
-    Scaffold(containerColor=MaterialTheme.colorScheme.background,topBar={TopAppBar(title={Text("Biblioteca",fontWeight=FontWeight.Bold)},navigationIcon={IconButton(onClick=onVoltar){Icon(Icons.Default.ArrowBack,"Voltar")}},colors=TopAppBarDefaults.topAppBarColors(containerColor=MaterialTheme.colorScheme.background))}){p->
+    Scaffold(containerColor=MaterialTheme.colorScheme.background,topBar={TopAppBar(title={Text("DICAS DA JOSY",fontWeight=FontWeight.Bold)},navigationIcon={IconButton(onClick=onVoltar){Icon(Icons.Default.ArrowBack,"Voltar")}},colors=TopAppBarDefaults.topAppBarColors(containerColor=MaterialTheme.colorScheme.background))}){p->
         LazyColumn(Modifier.padding(p).fillMaxSize(),contentPadding=PaddingValues(16.dp),verticalArrangement=Arrangement.spacedBy(12.dp)){
             item{JosyMini(message="Escolha um exercício e eu te mostro foco, técnica e cuidados.")}
             item{OutlinedTextField(busca,{busca=it},Modifier.fillMaxWidth(),singleLine=true,leadingIcon={Icon(Icons.Default.Search,null)},placeholder={Text("Buscar exercício ou músculo...")})}
             item{Row(horizontalArrangement=Arrangement.spacedBy(8.dp),modifier=Modifier.fillMaxWidth().horizontalScroll(rememberScrollState())){grupos.forEach{g->FilterChip(selected=filtro==g,onClick={filtro=g},label={Text(g,maxLines=1)})}}}
             item{Text(filtrados.size.toString()+" exercícios disponíveis",color=Lilas,fontWeight=FontWeight.Bold)}
-            items(filtrados){e->Card(onClick={selecionado=e},colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant),modifier=Modifier.fillMaxWidth()){Row(Modifier.padding(10.dp),horizontalArrangement=Arrangement.spacedBy(12.dp)){ExerciseMedia(e.nome, e.imagem, Modifier.size(92.dp), contentScale=ContentScale.Fit);Column(Modifier.weight(1f)){Text(e.nome,style=MaterialTheme.typography.titleMedium,fontWeight=FontWeight.Bold);Text(e.grupo,color=Lilas,style=MaterialTheme.typography.labelMedium);Text(e.foco,style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant);Text("Ver ficha completa  ›",color=Lilas,fontWeight=FontWeight.SemiBold)}}}}
+            items(filtrados){e->Card(onClick={selecionado=e},colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceVariant),modifier=Modifier.fillMaxWidth()){Row(Modifier.padding(10.dp),horizontalArrangement=Arrangement.spacedBy(12.dp)){ExerciseMedia(e.nome, e.imagem, Modifier.size(92.dp), contentScale=ContentScale.Fit, useGif = false, usePng = true);Column(Modifier.weight(1f)){Text(e.nome,style=MaterialTheme.typography.titleMedium,fontWeight=FontWeight.Bold);Text(e.grupo,color=Lilas,style=MaterialTheme.typography.labelMedium);Text(e.foco,style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant);Text("Ver ficha completa  ›",color=Lilas,fontWeight=FontWeight.SemiBold)}}}}
         }
     }
-    selecionado?.let { e -> ExerciseMediaFullScreen(e.nome, e.imagem) { selecionado = null } }
+    selecionado?.let { e -> ExerciseMediaFullScreen(e.nome, e.imagem, { selecionado = null }, useGif = false, usePng = true) }
 }
