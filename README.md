@@ -1,5 +1,6 @@
 Aplicativo desenvolvido por Daniel Marques via IA
-IMC
+
+-IMC-
 Metas 
 Controle de evolução
 Galeria de fotos para gravar o antes e depois
