@@ -803,8 +803,6 @@ private fun ExecucaoTreino(treino: Treino, onBack: () -> Unit, onRegisterSet: (S
                 val feitasEx = feitas[i] ?: 0
                 Card {
                     Column(Modifier.padding(14.dp)) {
-                        ExercicioVisual(e.nome, e.musculo, Modifier.fillMaxWidth())
-                        Spacer(Modifier.height(10.dp))
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                             Column(Modifier.weight(1f)) {
                                 Text(e.nome, fontWeight = FontWeight.Bold)
@@ -847,39 +845,6 @@ private fun ExecucaoTreino(treino: Treino, onBack: () -> Unit, onRegisterSet: (S
         }
     }
     if (info != null) ExerciseInfoDialog(info!!) { info = null }
-}
-
-@Composable
-fun ExercicioVisual(nome: String, musculo: String, modifier: Modifier = Modifier) {
-    val n = nome.lowercase()
-    val imagem = when {
-        "supino" in n -> R.drawable.img_supino_reto
-        "crucifixo" in n -> R.drawable.img_crucifixo
-        "agachamento" in n -> R.drawable.img_agachamento
-        "leg press" in n -> R.drawable.img_leg_press
-        "extensora" in n -> R.drawable.img_cadeira_extensora
-        "flexora" in n -> R.drawable.img_mesa_flexora
-        "puxada" in n -> R.drawable.img_puxada
-        "remada" in n -> R.drawable.img_remada
-        "desenvolvimento" in n -> R.drawable.img_desenvolvimento
-        "elevação lateral" in n -> R.drawable.img_elevacao_lateral
-        "rosca" in n -> R.drawable.img_rosca
-        "tríceps" in n -> R.drawable.img_triceps
-        "prancha" in n -> R.drawable.img_prancha
-        "abdominal" in n -> R.drawable.img_abdominal
-        else -> R.drawable.img_agachamento
-    }
-    var mostrarTelaCheia by remember(nome) { mutableStateOf(false) }
-    Card(modifier = modifier, onClick = { mostrarTelaCheia = true }) {
-        Column {
-            ExerciseMedia(nome, imagem, Modifier.fillMaxWidth().height(150.dp), ContentScale.Fit, useGif = true, usePng = false)
-            Column(Modifier.padding(12.dp)) {
-                Text(nome, fontWeight = FontWeight.Bold)
-                Text(musculo, style = MaterialTheme.typography.labelMedium)
-            }
-        }
-    }
-    if (mostrarTelaCheia) ExerciseMediaFullScreen(nome, imagem, { mostrarTelaCheia = false }, useGif = true, usePng = false)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
