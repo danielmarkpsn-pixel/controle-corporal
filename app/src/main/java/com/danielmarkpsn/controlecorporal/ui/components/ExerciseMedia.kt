@@ -65,9 +65,124 @@ private val exerciseGifs = listOf(
     "rosca punho invertida" to "execucao_correta_da_rosca_punho_invertida",
 )
 
+private val availableGifAssets = setOf(
+    "abdominal_cruzado",
+    "abdominal_declinado",
+    "abdominal_obliquo",
+    "abdominal_tesoura",
+    "afundo",
+    "agachamento_bulgaro",
+    "agachamento_com_kettlebell",
+    "agachamento_com_salto",
+    "agachamento_frontal",
+    "agachamento_goblet",
+    "agachamento_low_bar",
+    "agachamento_sumo",
+    "agachamento_unilateral_com_pe_elevado",
+    "barra_fixa",
+    "barra_fixa_graviton",
+    "barra_fixa_supinada",
+    "cadeira_abdutora",
+    "cadeira_flexora",
+    "crucifixo",
+    "crucifixo_chao",
+    "crucifixo_com_uma_mao",
+    "crucifixo_declinado",
+    "crucifixo_em_pe_na_polia_alta",
+    "crucifixo_em_pe_na_polia_baixa",
+    "crucifixo_em_pe_na_polia_media",
+    "crucifixo_inclinado",
+    "crucifixo_invertido",
+    "crucifixo_invertido_com_halteres",
+    "crucifixo_no_crossover",
+    "crucifixo_no_crossover_de_baixo_para_cima",
+    "crucifixo_no_crossover_de_cima_para_baixo",
+    "desenvolvimento_arnold",
+    "desenvolvimento_arnold_unilateral",
+    "desenvolvimento_nuca",
+    "desenvolvimento_sentado",
+    "elevacao_de_panturrilhas_com_barra_livre",
+    "elevacao_de_panturrilhas_em_pe_na_maquina",
+    "elevacao_de_panturrilhas_no_leg_press",
+    "elevacao_de_panturrilhas_sentado",
+    "elevacao_de_panturrilhas_sentado_com_halteres",
+    "elevacao_frontal",
+    "elevacao_lateral_na_polia",
+    "elevacao_lateral_na_polia_baixa",
+    "elevacao_pelvica_com_barra",
+    "encolhimento",
+    "encolhimento_com_halteres",
+    "execucao_correta_da_rosca_punho_invertida",
+    "execucao_correta_do_rack_pull",
+    "flexao_de_punho_invertida",
+    "flexao_declinada",
+    "levantamento_terra_com_barra_hexagonal",
+    "levantamento_terra_com_halteres",
+    "levantamento_terra_romeno",
+    "levantamento_terra_sumo",
+    "levantamento_terra_unilateral",
+    "mesa_flexora_unilateral",
+    "panturrilhas_em_pe",
+    "passada_invertida",
+    "passada_lateral",
+    "pull_down",
+    "pulley_costas",
+    "pullover_com_halter",
+    "puxada_neutra",
+    "puxada_unilateral",
+    "remada_baixa",
+    "remada_cavalinho",
+    "remada_curvada",
+    "remada_curvada_com_halteres",
+    "remada_em_pe",
+    "remada_renegada",
+    "remada_serrote",
+    "rosca_concentrada",
+    "rosca_direta_com_halteres",
+    "rosca_direta_com_pegada_afastada",
+    "rosca_direta_com_pegada_proxima",
+    "rosca_direta_na_barra_w",
+    "rosca_direta_na_polia",
+    "rosca_direta_no_cross",
+    "rosca_francesa_unilateral_na_polia",
+    "rosca_inclinada",
+    "rosca_invertida",
+    "rosca_invertida_com_halteres",
+    "rosca_martelo",
+    "rosca_martelo_com_halteres_alternada",
+    "rosca_martelo_com_peito_apoiado_no_banco_inclinado",
+    "rosca_martelo_corda",
+    "rosca_martelo_cruzada",
+    "rosca_martelo_inclinada",
+    "rosca_martelo_na_maquina",
+    "rosca_martelo_scott",
+    "rosca_scott",
+    "rosca_spider",
+    "rosca_zottman",
+    "stiff",
+    "supino_declinado",
+    "supino_inclinado_com_halteres",
+    "supino_na_maquina_articulada",
+    "supino_no_crossover",
+    "triceps_frances",
+    "voador_invertido"
+)
+
+private fun normalizeExerciseName(value: String): String =
+    java.text.Normalizer.normalize(value.trim().lowercase(), java.text.Normalizer.Form.NFD)
+        .replace(Regex("\\p{Mn}+"), "")
+        .replace(Regex("[^a-z0-9]+"), "_")
+        .trim('_')
+
 private fun gifAssetFor(name: String): String? {
-    val normalized = name.trim().lowercase()
-    return exerciseGifs.sortedByDescending { it.first.length }.firstOrNull { (key, _) -> key in normalized }?.second
+    val normalized = normalizeExerciseName(name)
+    if (normalized in availableGifAssets) return normalized
+
+    return exerciseGifs
+        .sortedByDescending { it.first.length }
+        .firstOrNull { (key, asset) ->
+            normalized.contains(normalizeExerciseName(key)) && asset in availableGifAssets
+        }?.second
 }
 
 @Composable
@@ -81,7 +196,7 @@ fun ExerciseMedia(
 ) {
     val context = LocalContext.current
     val gif = gifAssetFor(name)
-    if (!useGif || gif == null) {
+    if (!useGif) {
         if (usePng) {
             Image(
                 painter = painterResource(fallbackDrawable),
@@ -92,6 +207,13 @@ fun ExerciseMedia(
         } else {
             Box(modifier = modifier)
         }
+    } else if (gif == null) {
+        Image(
+            painter = painterResource(fallbackDrawable),
+            contentDescription = "Ilustração de $name",
+            modifier = modifier,
+            contentScale = contentScale
+        )
     } else {
         AsyncImage(
             model = ImageRequest.Builder(context)
@@ -119,7 +241,7 @@ fun ExerciseMediaFullScreen(name: String, fallbackDrawable: Int, onClose: () -> 
         )
     ) {
         Box(Modifier.fillMaxSize()) {
-            if (!useGif || gif == null) {
+            if (!useGif) {
                 if (usePng) {
                     Image(
                         painter = painterResource(fallbackDrawable),
@@ -130,6 +252,13 @@ fun ExerciseMediaFullScreen(name: String, fallbackDrawable: Int, onClose: () -> 
                 } else {
                     Box(Modifier.fillMaxSize())
                 }
+            } else if (gif == null) {
+                Image(
+                    painter = painterResource(fallbackDrawable),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Fit
+                )
             } else {
                 AsyncImage(
                     model = ImageRequest.Builder(context)
