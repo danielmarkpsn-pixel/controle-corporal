@@ -1,6 +1,10 @@
 package com.danielmarkpsn.controlecorporal.ui.screens
 
 import androidx.compose.foundation.layout.*
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -9,6 +13,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -31,6 +36,8 @@ fun HomeScreen(
     onVerAnatomia: () -> Unit,
     onVerExecucoes: () -> Unit
 ) {
+    val context = LocalContext.current
+    var mostrarPix by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(false) }
     val ultimoPeso by viewModel.ultimoPeso.collectAsStateWithLifecycle()
     val meta by viewModel.meta.collectAsStateWithLifecycle()
     val imc by viewModel.imcAtual.collectAsStateWithLifecycle()
@@ -108,11 +115,44 @@ fun HomeScreen(
                     if (alvo > 0f && atual > 0f) LinearProgressIndicator(progress = { (alvo / atual).coerceIn(0f, 1f) }, modifier = Modifier.fillMaxWidth(), color = Lilas)
                 }
             }
+            OutlinedButton(onClick = { mostrarPix = true }, modifier = Modifier.fillMaxWidth()) {
+                Icon(Icons.Default.Favorite, null, tint = Lilas)
+                Spacer(Modifier.width(8.dp))
+                Text("Apoiar o aplicativo via Pix")
+            }
             OutlinedButton(onClick = onAdicionarPeso, modifier = Modifier.fillMaxWidth()) {
                 Icon(Icons.Default.Add, null); Spacer(Modifier.width(8.dp)); Text("Registrar nova pesagem")
             }
             Spacer(Modifier.height(72.dp))
         }
+    }
+
+    if (mostrarPix) {
+        AlertDialog(
+            onDismissRequest = { mostrarPix = false },
+            icon = { Icon(Icons.Default.Favorite, contentDescription = null, tint = Lilas) },
+            title = { Text("Apoie o Controle Corporal") },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Text("Obrigado por apoiar o projeto! Use o número abaixo como chave Pix do tipo telefone.")
+                    Text("92984749921", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                    Text("Confira o nome do destinatário no aplicativo do seu banco antes de confirmar o pagamento.")
+                }
+            },
+            confirmButton = {
+                Button(onClick = {
+                    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                    clipboard.setPrimaryClip(ClipData.newPlainText("Chave Pix", "92984749921"))
+                    Toast.makeText(context, "Chave Pix copiada", Toast.LENGTH_SHORT).show()
+                    mostrarPix = false
+                }) {
+                    Icon(Icons.Default.ContentCopy, null)
+                    Spacer(Modifier.width(6.dp))
+                    Text("Copiar chave Pix")
+                }
+            },
+            dismissButton = { TextButton(onClick = { mostrarPix = false }) { Text("Fechar") } }
+        )
     }
 }
 
