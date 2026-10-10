@@ -3,6 +3,10 @@ package com.danielmarkpsn.controlecorporal.ui.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.gestures.rememberTransformableState
+import androidx.compose.foundation.gestures.transformable
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -243,10 +247,24 @@ fun ExerciseMediaFullScreen(name: String, fallbackDrawable: Int, onClose: () -> 
         Box(Modifier.fillMaxSize()) {
             if (!useGif) {
                 if (usePng) {
+                    var scale by remember(name) { mutableFloatStateOf(1f) }
+                    var offset by remember(name) { mutableStateOf(Offset.Zero) }
+                    val zoomState = rememberTransformableState { zoomChange, panChange, _ ->
+                        scale = (scale * zoomChange).coerceIn(1f, 5f)
+                        offset = if (scale > 1f) offset + panChange else Offset.Zero
+                    }
                     Image(
                         painter = painterResource(fallbackDrawable),
-                        contentDescription = null,
-                        modifier = Modifier.fillMaxSize(),
+                        contentDescription = "Imagem de $name. Use dois dedos para ampliar e arraste para mover.",
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .graphicsLayer(
+                                scaleX = scale,
+                                scaleY = scale,
+                                translationX = offset.x,
+                                translationY = offset.y
+                            )
+                            .transformable(state = zoomState),
                         contentScale = ContentScale.Fit
                     )
                 } else {
