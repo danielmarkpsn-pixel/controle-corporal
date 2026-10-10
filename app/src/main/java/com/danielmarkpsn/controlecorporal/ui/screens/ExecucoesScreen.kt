@@ -145,7 +145,9 @@ fun ExecucoesScreen(onVoltar: () -> Unit) {
                             name = item.nome,
                             fallbackDrawable = item.imagem,
                             modifier = Modifier.size(112.dp),
-                            contentScale = ContentScale.Fit
+                            contentScale = ContentScale.Fit,
+                            useGif = true,
+                            usePng = false
                         )
                         Column(
                             modifier = Modifier.weight(1f).align(androidx.compose.ui.Alignment.CenterVertically),
@@ -169,6 +171,6 @@ fun ExecucoesScreen(onVoltar: () -> Unit) {
     }
 
     selecionado?.let { item ->
-        ExerciseMediaFullScreen(item.nome, item.imagem) { selecionado = null }
+        ExerciseMediaFullScreen(item.nome, item.imagem, { selecionado = null }, useGif = true, usePng = false)
     }
 }
