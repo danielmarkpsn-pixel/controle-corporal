@@ -174,7 +174,13 @@ private val availableGifAssets = setOf(
     "supino_na_maquina_articulada",
     "supino_no_crossover",
     "triceps_frances",
-    "voador_invertido"
+    "voador_invertido",
+    "supino_inclinado",
+    "supino_reto",
+    "triceps_na_polia",
+    "elevacao_lateral_na_polia_baixa",
+    "encolhimento_com_halteres",
+    "rosca_scott"
 )
 
 private fun normalizeExerciseName(value: String): String =
