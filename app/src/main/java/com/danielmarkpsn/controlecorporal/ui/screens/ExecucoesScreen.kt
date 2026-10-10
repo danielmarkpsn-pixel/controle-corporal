@@ -119,8 +119,7 @@ private val execucoesDisponiveis = listOf(
     ExecucaoItem("Elevação Lateral na Polia", "Ombros", R.drawable.img_desenvolvimento),
     ExecucaoItem("Rosca Martelo", "Bíceps", R.drawable.img_rosca),
     ExecucaoItem("Execução correta da rosca punho invertida", "Antebraços", R.drawable.img_rosca),
-    ExecucaoItem("Execução correta do rack pull", "Costas e posteriores", R.drawable.img_remada)
-)
+    ExecucaoItem("Execução correta do rack pull", "Costas e posteriores", R.drawable.img_remada))
 
 private val filtrosExecucao = listOf("Todos", "Pernas", "Peito", "Costas", "Ombros", "Braços", "Glúteos", "Abdômen")
 
