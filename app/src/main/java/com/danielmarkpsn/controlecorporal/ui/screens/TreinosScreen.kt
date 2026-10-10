@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import android.content.Intent
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.danielmarkpsn.controlecorporal.data.*
@@ -94,6 +95,44 @@ fun TreinosScreen(onVoltar: () -> Unit) {
     var executando by remember { mutableStateOf<Treino?>(null) }
     var novo by remember { mutableStateOf(false) }
     var prontos by remember { mutableStateOf(false) }
+    var treinoConcluido by remember { mutableStateOf<TreinoHistorico?>(null) }
+
+    if (treinoConcluido != null) {
+        TreinoConcluidoScreen(
+            treino = executando ?: treinos.firstOrNull { it.nome == treinoConcluido!!.nome },
+            resultado = treinoConcluido!!,
+            onShare = {
+                val h = treinoConcluido!!
+                val texto = listOf(
+                    "🎉 TREINO CONCLUÍDO — Controle Corporal",
+                    "A Josy está orgulhosa de você! 💜",
+                    "",
+                    "Treino: ${h.nome}",
+                    "Objetivo: ${h.objetivo}",
+                    "Data: ${formatarData(h.data)}",
+                    "Duração: ${h.duracaoMin} minutos",
+                    "Exercícios concluídos: ${h.exerciciosConcluidos}",
+                    "Séries concluídas: ${h.seriesConcluidas}",
+                    "Volume total: ${String.format(Locale("pt", "BR"), "%.1f", h.volume)} kg",
+                    "",
+                    "Cada treino é uma conquista. Vamos continuar! 💪"
+                ).joinToString("\n")
+                val intent = Intent(Intent.ACTION_SEND).apply {
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_SUBJECT, "Treino concluído — Controle Corporal")
+                    putExtra(Intent.EXTRA_TEXT, texto)
+                }
+                context.startActivity(Intent.createChooser(intent, "Compartilhar resultado do treino"))
+            },
+            onClose = {
+                treinoConcluido = null
+                executando = null
+                historico = storage.carregarHistorico()
+                aba = 2
+            }
+        )
+        return
+    }
 
     if (executando != null) {
         ExecucaoTreino(executando!!, { executando = null }, onRegisterSet = { registro ->
@@ -102,8 +141,7 @@ fun TreinosScreen(onVoltar: () -> Unit) {
         }) {
             storage.adicionarHistorico(it)
             historico = storage.carregarHistorico()
-            executando = null
-            aba = 2
+            treinoConcluido = it
         }
         return
     }
@@ -758,6 +796,52 @@ private fun InfoTreino(titulo: String, valor: String, modifier: Modifier = Modif
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun TreinoConcluidoScreen(
+    treino: Treino?,
+    resultado: TreinoHistorico,
+    onShare: () -> Unit,
+    onClose: () -> Unit
+) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Treino concluído", fontWeight = FontWeight.Bold) },
+                navigationIcon = { IconButton(onClick = onClose) { Icon(Icons.Default.ArrowBack, "Voltar") } }
+            )
+        }
+    ) { p ->
+        LazyColumn(Modifier.padding(p).fillMaxSize(), contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            item {
+                JosyHero(title = "Parabéns! Você conseguiu! 🎉", message = "Eu, a Josy, estou muito orgulhosa de você. Cada série concluída é mais um passo na sua evolução!")
+            }
+            item {
+                Card(Modifier.fillMaxWidth(), shape = RoundedCornerShape(22.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)) {
+                    Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        Text(resultado.nome, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.ExtraBold)
+                        Text(resultado.objetivo, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                        HorizontalDivider()
+                        ResumoTreinoLinha("Data", formatarData(resultado.data))
+                        ResumoTreinoLinha("Duração", "${resultado.duracaoMin} min")
+                        ResumoTreinoLinha("Exercícios concluídos", "${resultado.exerciciosConcluidos}${treino?.let { " / ${it.exercicios.size}" } ?: ""}")
+                        ResumoTreinoLinha("Séries concluídas", "${resultado.seriesConcluidas}")
+                        ResumoTreinoLinha("Volume total", "${String.format(Locale("pt", "BR"), "%.1f", resultado.volume)} kg")
+                    }
+                }
+            }
+            item { Button(onClick = onShare, modifier = Modifier.fillMaxWidth()) { Icon(Icons.Default.Share, null); Spacer(Modifier.width(8.dp)); Text("COMPARTILHAR MEU RESULTADO") } }
+            item { OutlinedButton(onClick = onClose, modifier = Modifier.fillMaxWidth()) { Icon(Icons.Default.History, null); Spacer(Modifier.width(8.dp)); Text("Ver histórico de treinos") } }
+        }
+    }
+}
+
+@Composable
+private fun ResumoTreinoLinha(rotulo: String, valor: String) {
+    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+        Text(rotulo, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(valor, fontWeight = FontWeight.Bold)
+    }
+}
 @Composable
 private fun ExecucaoTreino(treino: Treino, onBack: () -> Unit, onRegisterSet: (SerieRegistro) -> Unit, onFinish: (TreinoHistorico) -> Unit) {
     val inicio = remember { System.currentTimeMillis() }
