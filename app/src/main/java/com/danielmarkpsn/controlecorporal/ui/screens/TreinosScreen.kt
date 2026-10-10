@@ -208,7 +208,7 @@ private fun ListaTreinos(
             JosyHero(
                 title = "Vamos treinar juntos!",
                 message = "A Josy acompanha suas séries, seus descansos e sua evolução.",
-                actionLabel = "Ver treinos prontos",
+                actionLabel = "Ver fichas por músculo",
                 onAction = onProntos
             )
         }
@@ -240,7 +240,7 @@ private fun ListaTreinos(
                     }
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         Button(onClick = onProntos, Modifier.weight(1f)) {
-                            Icon(Icons.Default.LibraryAdd, null); Spacer(Modifier.width(5.dp)); Text("Treinos prontos")
+                            Icon(Icons.Default.LibraryAdd, null); Spacer(Modifier.width(5.dp)); Text("Fichas musculares")
                         }
                         OutlinedButton(onClick = onNovo, Modifier.weight(1f)) {
                             Icon(Icons.Default.Add, null); Spacer(Modifier.width(5.dp)); Text("Novo treino")
