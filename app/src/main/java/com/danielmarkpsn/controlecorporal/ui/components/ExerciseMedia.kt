@@ -298,7 +298,7 @@ fun ExerciseMediaFullScreen(name: String, fallbackDrawable: Int, onClose: () -> 
             } else {
                 AsyncImage(
                     model = ImageRequest.Builder(context)
-                        .data("file:///android_asset/exercise_gifs/$gif.gif")
+                        .data("file:///android_asset/exercise_gifs/${gifAssetFileNames[gif] ?: "$gif.gif"}")
                         .decoderFactory(GifDecoder.Factory())
                         .crossfade(false)
                         .build(),
