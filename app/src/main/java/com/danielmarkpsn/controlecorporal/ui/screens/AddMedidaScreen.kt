@@ -10,6 +10,7 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Straighten
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import kotlinx.coroutines.launch
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -32,9 +33,12 @@ fun AddMedidaScreen(
     var tipoSelecionado by remember { mutableStateOf(tiposPredefinidos.first()) }
     var valorTexto by remember { mutableStateOf("") }
     var expandido by remember { mutableStateOf(false) }
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
     val dataAtual = remember { System.currentTimeMillis() }
 
     Scaffold(
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             TopAppBar(
                 title = { Text("Medidas corporais") },
@@ -120,7 +124,10 @@ fun AddMedidaScreen(
                 onClick = {
                     valorTexto.toFloatOrNull()?.takeIf { it > 0f }?.let {
                         viewModel.adicionarMedida(dataAtual, tipoSelecionado, it)
-                        onVoltar()
+                        valorTexto = ""
+                        scope.launch {
+                            snackbarHostState.showSnackbar("Medida salva com sucesso")
+                        }
                     }
                 },
                 modifier = Modifier.fillMaxWidth(),
