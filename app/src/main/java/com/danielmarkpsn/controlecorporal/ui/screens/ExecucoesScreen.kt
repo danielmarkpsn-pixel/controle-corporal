@@ -133,7 +133,53 @@ private val execucoesDisponiveis = listOf(
     ExecucaoItem("Crucifixo com Uma Mão", "Peito", R.drawable.img_crucifixo),
 )
 
-private val filtrosExecucao = listOf("Todos", "Pernas", "Peito", "Costas", "Ombros", "Braços", "Glúteos", "Abdômen")
+private val filtrosExecucao = listOf(
+    "Todos", "Pernas", "Glúteos", "Peito", "Costas", "Ombros",
+    "Braços", "Bíceps", "Tríceps", "Antebraços", "Trapézio", "Abdômen"
+)
+
+private fun normalizarTextoExecucao(texto: String): String =
+    java.text.Normalizer.normalize(texto.lowercase(), java.text.Normalizer.Form.NFD)
+        .replace(Regex("\\p{Mn}+"), "")
+        .replace(Regex("[^a-z0-9]+"), " ")
+        .trim()
+
+private fun pertenceAoFiltro(item: ExecucaoItem, filtro: String): Boolean {
+    val grupo = normalizarTextoExecucao(item.grupo)
+    val nome = normalizarTextoExecucao(item.nome)
+    return when (normalizarTextoExecucao(filtro)) {
+        "todos" -> true
+        "bracos" -> listOf("biceps", "triceps", "antebracos", "bracos")
+            .any { grupo.contains(it) || nome.contains(it) } ||
+            listOf("rosca", "flexao de punho").any { nome.contains(it) }
+        "biceps" -> grupo.contains("biceps") || nome.contains("rosca") ||
+            nome.contains("barra fixa supinada")
+        "triceps" -> grupo.contains("triceps") || nome.contains("triceps") ||
+            nome.contains("francesa unilateral na polia") || nome.contains("flexao declinada")
+        "antebracos" -> grupo.contains("antebracos") ||
+            listOf("punho", "zottman", "rosca invertida").any { nome.contains(it) }
+        "pernas" -> listOf("pernas", "posteriores", "coxa", "quadriceps", "panturrilha", "gluteos")
+            .any { grupo.contains(it) } ||
+            listOf("agachamento", "afundo", "passada", "leg press", "panturrilha",
+                "cadeira flexora", "mesa flexora", "stiff", "levantamento terra",
+                "elevacao pelvica").any { nome.contains(it) }
+        "gluteos" -> grupo.contains("gluteos") ||
+            listOf("agachamento", "afundo", "passada", "elevacao pelvica", "stiff",
+                "levantamento terra").any { nome.contains(it) }
+        "peito" -> grupo.contains("peito") ||
+            listOf("supino", "crucifixo", "pullover", "flexao declinada").any { nome.contains(it) }
+        "costas" -> grupo.contains("costas") ||
+            listOf("remada", "puxada", "pulley", "barra fixa", "pull down", "rack pull",
+                "levantamento terra").any { nome.contains(it) }
+        "ombros" -> grupo.contains("ombros") ||
+            listOf("desenvolvimento", "elevacao frontal", "elevacao lateral", "voador invertido",
+                "crucifixo invertido", "encolhimento").any { nome.contains(it) }
+        "trapezio" -> grupo.contains("trapezio") || nome.contains("encolhimento")
+        "abdomen" -> grupo.contains("abdomen") ||
+            listOf("abdominal", "prancha", "remada renegada").any { nome.contains(it) }
+        else -> grupo.contains(normalizarTextoExecucao(filtro))
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -144,31 +190,10 @@ fun ExecucoesScreen(onVoltar: () -> Unit) {
 
     val filtrados = execucoesDisponiveis
         .filter { item ->
-            val grupoNormalizado = java.text.Normalizer.normalize(
-                item.grupo.lowercase(),
-                java.text.Normalizer.Form.NFD
-            ).replace(Regex("\\p{Mn}+"), "")
-            val filtroNormalizado = java.text.Normalizer.normalize(
-                filtro.lowercase(),
-                java.text.Normalizer.Form.NFD
-            ).replace(Regex("\\p{Mn}+"), "")
-
-            val pertenceAoGrupo = when (filtroNormalizado) {
-                "todos" -> true
-                "bracos" -> grupoNormalizado.contains("biceps") ||
-                    grupoNormalizado.contains("triceps") ||
-                    grupoNormalizado.contains("antebracos") ||
-                    grupoNormalizado.contains("bracos")
-                else -> grupoNormalizado.contains(filtroNormalizado)
-            }
-
-            pertenceAoGrupo &&
+            pertenceAoFiltro(item, filtro) &&
                 (busca.isBlank() || item.nome.contains(busca, ignoreCase = true) || item.grupo.contains(busca, ignoreCase = true))
         }
-        .sortedBy { item ->
-            java.text.Normalizer.normalize(item.nome.lowercase(), java.text.Normalizer.Form.NFD)
-                .replace(Regex("\\p{Mn}+"), "")
-        }
+        .sortedBy { item -> normalizarTextoExecucao(item.nome) }
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
