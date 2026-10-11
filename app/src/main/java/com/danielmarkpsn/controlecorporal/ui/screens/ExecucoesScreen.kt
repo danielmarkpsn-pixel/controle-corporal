@@ -152,8 +152,8 @@ private fun pertenceAoFiltro(item: ExecucaoItem, filtro: String): Boolean {
         "bracos" -> listOf("biceps", "triceps", "antebracos", "bracos")
             .any { grupo.contains(it) || nome.contains(it) } ||
             listOf("rosca", "flexao de punho").any { nome.contains(it) }
-        "biceps" -> grupo.contains("biceps") || nome.contains("rosca") ||
-            nome.contains("barra fixa supinada")
+        "biceps" -> !grupo.contains("triceps") && (grupo.contains("biceps") || nome.contains("rosca") ||
+            nome.contains("barra fixa supinada"))
         "triceps" -> grupo.contains("triceps") || nome.contains("triceps") ||
             nome.contains("francesa unilateral na polia") || nome.contains("flexao declinada")
         "antebracos" -> grupo.contains("antebracos") ||
