@@ -74,6 +74,13 @@ private val exerciseGifs = listOf(
     "rosca punho invertida" to "execucao_correta_da_rosca_punho_invertida",
 )
 
+private val gifAssetFileNames = mapOf(
+    "supino_inclinado" to "Supino inclinado.gif",
+    "supino_reto" to "supino reto.gif",
+    "triceps_na_polia" to "tríceps na polia.gif",
+    "supino_no_crossover" to "supino_no_crossover.gif"
+)
+
 private val availableGifAssets = setOf(
     "abdominal_cruzado",
     "abdominal_declinado",
@@ -232,7 +239,7 @@ fun ExerciseMedia(
     } else {
         AsyncImage(
             model = ImageRequest.Builder(context)
-                .data("file:///android_asset/exercise_gifs/$gif.gif")
+                .data("file:///android_asset/exercise_gifs/${gifAssetFileNames[gif] ?: "$gif.gif"}")
                 .decoderFactory(GifDecoder.Factory())
                 .crossfade(false)
                 .build(),
