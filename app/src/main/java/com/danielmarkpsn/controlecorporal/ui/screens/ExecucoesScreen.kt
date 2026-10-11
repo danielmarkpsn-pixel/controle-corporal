@@ -142,10 +142,33 @@ fun ExecucoesScreen(onVoltar: () -> Unit) {
     var filtro by remember { mutableStateOf("Todos") }
     var selecionado by remember { mutableStateOf<ExecucaoItem?>(null) }
 
-    val filtrados = execucoesDisponiveis.filter { item ->
-        (filtro == "Todos" || item.grupo.contains(filtro, ignoreCase = true)) &&
-            (busca.isBlank() || item.nome.contains(busca, ignoreCase = true) || item.grupo.contains(busca, ignoreCase = true))
-    }
+    val filtrados = execucoesDisponiveis
+        .filter { item ->
+            val grupoNormalizado = java.text.Normalizer.normalize(
+                item.grupo.lowercase(),
+                java.text.Normalizer.Form.NFD
+            ).replace(Regex("\\p{Mn}+"), "")
+            val filtroNormalizado = java.text.Normalizer.normalize(
+                filtro.lowercase(),
+                java.text.Normalizer.Form.NFD
+            ).replace(Regex("\\p{Mn}+"), "")
+
+            val pertenceAoGrupo = when (filtroNormalizado) {
+                "todos" -> true
+                "bracos" -> grupoNormalizado.contains("biceps") ||
+                    grupoNormalizado.contains("triceps") ||
+                    grupoNormalizado.contains("antebracos") ||
+                    grupoNormalizado.contains("bracos")
+                else -> grupoNormalizado.contains(filtroNormalizado)
+            }
+
+            pertenceAoGrupo &&
+                (busca.isBlank() || item.nome.contains(busca, ignoreCase = true) || item.grupo.contains(busca, ignoreCase = true))
+        }
+        .sortedBy { item ->
+            java.text.Normalizer.normalize(item.nome.lowercase(), java.text.Normalizer.Form.NFD)
+                .replace(Regex("\\p{Mn}+"), "")
+        }
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
